@@ -1,0 +1,218 @@
+﻿<!--The code defines a resource dictionary with several namespaces.-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:cal="http://www.caliburnproject.org" 
+                    xmlns:sqlDbEditor="clr-namespace:SqlDbEditor.Converters"
+                    xmlns:controls="clr-namespace:SqlDbEditor.Controls"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:regex="clr-namespace:SqlDbEditor.RegEx">
+    <!-- #Region "Coverters used across the application" -->
+
+    <!--This line adds a converter named InverseBooleanToVisibilityConverter to the resource dictionary.-->
+    <sqlDbEditor:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    <!-- #EndRegion -->
+
+    <!-- #Region "Base Styles" -->
+
+    <Style x:Key="BaseButtonStyle" TargetType="Button">
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+    <SolidColorBrush x:Key="TextForegroundColor" Color="#333333"/>
+
+    <ControlTemplate x:Key="ValidationErrorTemplate">
+        <StackPanel>
+            <AdornedElementPlaceholder x:Name="placeHolder"/>
+            <TextBlock Foreground="Purple" FontSize="13" FontStyle="Italic"
+             Text="{Binding ElementName=placeHolder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
+        </StackPanel>
+    </ControlTemplate>
+
+    <!-- #EndRegion -->
+    
+    <!-- #Region "MainView Styles" -->
+
+    <!--This style named MainWindowBorderStyle targets the Border control type and sets its border brush color to Gray and border thickness to 7.-->
+    <Style x:Key="MainWindowBorderStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="Gray" />
+        <Setter Property="BorderThickness" Value="7" />
+    </Style>
+
+    <!--This style named TitleGridStyle targets the Grid control type and sets its margin, grid row, height, and background color.-->
+    <Style x:Key="TitleGridStyle" TargetType="Grid">
+        <Setter Property="Margin" Value="10,10" />
+        <Setter Property="Grid.Row" Value="0" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Background" Value="DimGray" />
+    </Style>
+
+    <!--This style named TitleTextBlockStyle targets the TextBlock control type and sets its margin, foreground color, vertical alignment, font size, and font weight.-->
+    <Style x:Key="TitleTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="Foreground" Value="DarkGray" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="25" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <!--This style named WindowsToolButtonStyle targets the Button control type and sets its width, height, margin, font size, and font weight.-->
+    <Style x:Key="WindowsToolButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+    </Style>
+
+    <!-- #EndRegion -->
+
+    <!-- #Region "CustomerEditView Styles" -->    
+    <!--This style named CustomerEditBorderStyle targets the Border control type and sets its border brush color to Gray and border thickness to 5.-->
+    <Style x:Key="CustomerEditBorderStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="Gray" />
+        <Setter Property="BorderThickness" Value="5" />
+    </Style>
+
+    <!--This style named CloseButtonStyle targets the Button control type and sets its width, height, margin, font size, and font weight.-->
+    <Style TargetType="Window">
+        <Setter Property="cal:Message.Attach" Value="[Event Unloaded] = [Action Dispose()]" />
+    </Style>
+
+    <!--This style named EditTextBlockStyle targets the TextBlock control type and sets its margin, height, width, and font weight.-->
+    <Style x:Key="EditTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Margin" Value="5,-5,5,0"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+    </Style>
+
+    <!--This style named EditTextBoxStyle targets the TextBox control type and sets its margin, height, width. It also defines a trigger that changes the background color to MediumVioletRed when there is a validation error. The style also includes an error template for displaying validation errors.-->
+    <Style x:Key="EditTextBoxStyle" TargetType="TextBox">
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="true">
+                <Setter Property="Background" Value="PaleVioletRed" />
+            </Trigger>
+        </Style.Triggers>
+        <Setter Property="Margin" Value="5,5,5,15"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}"/>
+    </Style>
+
+    <Style x:Key="EditNumericalBoxStyle" TargetType="controls:NumericalBox">
+        <Style.Triggers>
+            <Trigger Property="Validation.HasError" Value="true">
+                <Setter Property="Background" Value="PaleVioletRed" />
+            </Trigger>
+        </Style.Triggers>
+        <Setter Property="Margin" Value="5,5,5,15"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}"/>
+    </Style>
+
+    <!--This style named EditButtonStyle targets the Button control type and sets its margin, height, and width.-->
+    <Style x:Key="EditButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="Width" Value="100" />
+    </Style>
+
+    <!--This style named EditComboStyle targets the ComboBox control type and sets its margin, height, and width.-->
+    <Style x:Key="EditComboStyle" TargetType="ComboBox">
+        <Setter Property="Margin" Value="5,5,5,15" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}"/>
+    </Style>
+
+    <!-- #EndRegion -->
+
+    <!-- #Region "CustomerView Styles" -->
+    <!--This style named CustomerDataGridStyle targets the DataGrid control type and sets its margin, border thickness, border brush color, column width, column virtualization enablement, row virtualization enablement, read-only mode, auto-generate columns disablement, and row deletion disablement.-->
+    <Style x:Key="CustomerDataGridStyle" TargetType="DataGrid">
+        <Setter Property="Margin" Value="10" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="BorderBrush" Value="LightGray" />
+        <Setter Property="ColumnWidth" Value="*" />
+        <Setter Property="EnableColumnVirtualization" Value="True" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="CanUserReorderColumns" Value="False" />
+        <Setter Property="EnableRowVirtualization" Value="True" />
+        <Setter Property="IsReadOnly" Value="True" />
+        <Setter Property="AutoGenerateColumns" Value="False" />
+        <Setter Property="CanUserDeleteRows" Value="False" />
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="AlternatingRowBackground" Value="WhiteSmoke"/>
+        <Setter Property="GridLinesVisibility" Value="None"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+    </Style>
+
+    <!--This style named CustomerRowHeaderStyle targets the DataGrid control -->
+    <Style x:Key="CustomerRowHeaderStyle" TargetType="DataGridRowHeader">
+        <Setter Property="Background" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+
+    <!--This style named CustomerColumnHeaderStyle targets the DataGrid control -->
+    <Style x:Key="CustomerColumnHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Foreground" Value="Gray"/>
+        <Setter Property="Height" Value="50" />
+        
+    </Style>
+
+    <!--This style named ButtonsContainerStackPanelStyle targets the Button control type-->
+    <Style x:Key="LoadCustomersStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Width" Value="125"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="Foreground" Value="Gray"/>
+    </Style>
+    
+    <!--This style named ButtonsContainerStackPanelStyle targets the StackPanel control type and sets its horizontal and vertical alignment, orientation, and visibility based on the IsEnabled property of a control named LoadCustomers.-->
+    <Style x:Key="ProgressContainerStackPanelStyle" TargetType="StackPanel">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Orientation" Value="Vertical" />
+    </Style>
+
+    <!--This style named ProgressBarStyle targets the ProgressBar control type and sets its margin, height, width, and enables indeterminate mode.-->
+    <Style x:Key="ProgressBarStyle" TargetType="ProgressBar">
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Height" Value="10" />
+        <Setter Property="Width" Value="200" />
+        <Setter Property="IsIndeterminate" Value="True" />
+    </Style>
+
+    <!--This style named ProgressIndicatorTextBlockStyle targets the TextBlock control type and sets its horizontal and vertical alignment.-->
+    <Style x:Key="ProgressIndicatorTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    <!-- #EndRegion -->    
+</ResourceDictionary>
