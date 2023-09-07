@@ -139,7 +139,7 @@ namespace SqlDbEditor.ViewModels
         /// <summary>
         /// Gets or sets the data row view that represents the customer.
         /// </summary>
-        public DataRowView CustomerRow
+        public virtual DataRowView CustomerRow
         {
             get => _customerRow;
             set
@@ -335,8 +335,9 @@ namespace SqlDbEditor.ViewModels
         /// <summary>
         /// Updates the customer data in the database and closes the edit form.
         /// </summary>
-        public async Task Ok()
+        public async Task<OkResult> Ok()
         {
+            OkResult okResult = OkResult.Passed;
             try
             {
                 if (ValidateAllFields())
@@ -384,19 +385,28 @@ namespace SqlDbEditor.ViewModels
                         _logger?.Info("Start closing the CustomerEditView");
                         await TryCloseAsync();
                         _logger?.Info("Stop closing the CustomerEditView");
+                        okResult = OkResult.Passed;
                     }
                     else
                     {
+                        okResult = OkResult.Failed;
                         _logger?.Warn("Failed to updating the customer details to the database");
                     }
 
                     IsUpdateProgress = false;
+                } 
+                else
+                {
+                    okResult = OkResult.ValidationFailed;
                 }
             }
             catch (Exception ex)
             {
+                okResult = OkResult.Failed;
                 _logger?.Error(ex);
             }
+
+            return okResult;
         }
 
         /// <summary>

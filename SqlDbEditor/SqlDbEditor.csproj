@@ -120,11 +120,12 @@
     <Compile Include="Services\IStateProviderService.cs" />
     <Compile Include="Services\StateProviderService.cs" />
     <Compile Include="ViewModels\Controls\CustomerViewModel.cs" />
-    <Compile Include="ViewModels\Controls\ICustomerViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ICustomerViewModel.cs" />
     <Compile Include="ViewModels\CustomerEditViewModel.cs" />
-    <Compile Include="ViewModels\ICustomerEditViewModel.cs" />
-    <Compile Include="ViewModels\IMainViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\ICustomerEditViewModel.cs" />
+    <Compile Include="ViewModels\Interfaces\IMainViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
+    <Compile Include="ViewModels\OkResult.cs" />
     <Compile Include="Views\Controls\CustomerView.xaml.cs">
       <DependentUpon>CustomerView.xaml</DependentUpon>
     </Compile>

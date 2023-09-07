@@ -5,6 +5,7 @@ using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System.Web.Profile;
 using static SqlDbEditor.DataAccessLayer.LinkTekTest;
 
 namespace SqlDbEditor.ViewModels.Controls
@@ -136,7 +137,7 @@ namespace SqlDbEditor.ViewModels.Controls
                 }
                 catch (SqlException ex)
                 {
-                    await _eventAggregator.PublishOnUIThreadAsync(new ErrorMessage { Message = ex.Message, Type = "Sql Connection Error" });
+                    await PublishOnUIThreadAsync(new ErrorMessage { Message = ex.Message, Type = "Sql Connection Error" });
                 }
                 catch (Exception ex)
                 {
@@ -145,6 +146,15 @@ namespace SqlDbEditor.ViewModels.Controls
             });
 
             CanLoadCustomers = true;
+        }
+        
+        /// <summary>
+        /// Publish the error message through the event aggregator
+        /// </summary>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        public virtual Task  PublishOnUIThreadAsync(ErrorMessage errorMessage)
+        {
+            return _eventAggregator.PublishOnUIThreadAsync(errorMessage);
         }
 
         /// <summary>

@@ -94,7 +94,7 @@ namespace SqlDbEditor.ViewModels
         /// Asynchronously performs the "Ok" action.
         /// </summary>
         /// <returns>A task representing the asynchronous operation.</returns>
-        Task Ok();
+        Task<OkResult> Ok();
 
         /// <summary>
         /// Fill the customer info in the UI
