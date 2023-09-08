@@ -1,12 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Data.SqlClient;
+using System.Threading.Tasks;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SqlDbEditor.Messages;
 using SqlDbEditor.Services;
+using SqlDbEditor.Tests.TestUtils;
 using SqlDbEditor.ViewModels.Controls;
-using System.Data.SqlClient;
-using System.Threading.Tasks;
 
-namespace SqlDbEditor.Tests
+namespace SqlDbEditor.Tests.ViewModels.Controls
 {
 
     [TestClass]

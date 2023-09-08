@@ -13,7 +13,7 @@ namespace SqlDbEditor
         /// <summary>
         /// Represents a logger configured with the bootstrap
         /// </summary>
-        private readonly ILog _logger = null;
+        private readonly ILog _logger;
 
         /// <summary>
         /// Constructor

@@ -11,7 +11,7 @@ namespace SqlDbEditor.Views
     /// <summary>
     /// Represents the main window of the application.
     /// </summary>
-    public partial class MainView : Window, IHandle<ErrorMessage>
+    public partial class MainView : IHandle<ErrorMessage>
     {
         /// <summary>
         /// Initializes a new instance of the MainView class.

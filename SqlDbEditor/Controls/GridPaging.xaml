@@ -64,7 +64,7 @@
             
             <Button Content="&lt;" 
                     Grid.Column="1" 
-                    ToolTip="Move to prvious page"
+                    ToolTip="Move to previous page"
                     Style="{StaticResource PaginationButtonStyle}"                    
                     Name="PreviousPageButton" 
                     Click="OnButtonPreviousClick" />

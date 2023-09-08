@@ -14,7 +14,7 @@ namespace SqlDbEditor.ViewModels
     /// <summary> 
     /// Represents the view model for editing customer details. 
     /// </summary> 
-    public class CustomerEditViewModel : Screen, ICustomerEditViewModel
+    public class CustomerEditViewModel : Screen, IDisposable
     {
         #region Private Fields
         /// <summary>

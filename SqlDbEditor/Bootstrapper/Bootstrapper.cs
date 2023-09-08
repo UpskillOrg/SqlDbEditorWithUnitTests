@@ -20,7 +20,7 @@ namespace SqlDbEditor.Bootstrapper
         /// <summary>
         /// Represents a logger configured with the bootstrap
         /// </summary>
-        protected ILog Logger = null;
+        protected ILog Logger;
 
         /// <summary>
         /// Initializes a new instance of the Bootstrapper class and calls the base class Initialize method.

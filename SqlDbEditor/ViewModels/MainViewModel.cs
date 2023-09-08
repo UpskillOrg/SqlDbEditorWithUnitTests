@@ -1,13 +1,13 @@
 ﻿using Caliburn.Micro;
-using SqlDbEditor.ViewModels.Controls;
 using System;
+using SqlDbEditor.ViewModels.Controls;
 
 namespace SqlDbEditor.ViewModels
 {
     /// <summary>
     /// The main view model for the application.
     /// </summary>
-    public class MainViewModel : PropertyChangedBase, IMainViewModel
+    public class MainViewModel : PropertyChangedBase, IDisposable
     {
         #region Private Field
         /// <summary> 
@@ -18,7 +18,7 @@ namespace SqlDbEditor.ViewModels
         /// <summary>
         /// Represents a view model for a customer.
         /// </summary>
-        private ICustomerViewModel _customerViewModel;
+        private CustomerViewModel _customerViewModel;
 
         /// <summary>
         /// Represents the logger
@@ -32,7 +32,7 @@ namespace SqlDbEditor.ViewModels
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// </summary>
         /// <param name="viewModel">The customer view model.</param>
-        public MainViewModel(ICustomerViewModel viewModel)
+        public MainViewModel(CustomerViewModel viewModel)
         {
             _logger = LogManager.GetLog(typeof(MainViewModel));
             CustomerViewModel = viewModel;
@@ -43,7 +43,7 @@ namespace SqlDbEditor.ViewModels
         /// <summary>
         /// Gets or sets the customer view model.
         /// </summary>
-        public ICustomerViewModel CustomerViewModel
+        public CustomerViewModel CustomerViewModel
         {
             get => _customerViewModel;
             set

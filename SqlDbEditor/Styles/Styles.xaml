@@ -4,7 +4,7 @@
                     xmlns:sqlDbEditor="clr-namespace:SqlDbEditor.Converters"
                     xmlns:controls="clr-namespace:SqlDbEditor.Controls"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- #Region "Coverters used across the application" -->
+    <!-- #Region "Converters used across the application" -->
 
     <!--This line adds a converter named InverseBooleanToVisibilityConverter to the resource dictionary.-->
     <sqlDbEditor:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
@@ -176,7 +176,8 @@
     <!-- #EndRegion -->
 
     <!-- #Region "CustomerView Styles" -->
-    <!--This style named CustomerDataGridStyle targets the DataGrid control type and sets its margin, border thickness, border brush color, column width,enabling column virtualization , enabling row virtualization, read-only mode, auto-generate columns disablement, and row deletion disablement.-->
+    <!--This style named CustomerDataGridStyle targets the DataGrid control type and sets its margin, border thickness, 
+    border brush color, column width, read-only mode, auto-generate columns disablement, and row deletion disablement.-->
     <Style x:Key="CustomerDataGridStyle" TargetType="DataGrid">
         <Setter Property="Margin" Value="10" />
         <Setter Property="BorderThickness" Value="2" />

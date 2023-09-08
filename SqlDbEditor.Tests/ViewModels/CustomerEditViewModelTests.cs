@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SqlDbEditor.Services;
+using SqlDbEditor.Tests.TestUtils;
 using SqlDbEditor.ViewModels;
-using System;
 
-namespace SqlDbEditor.Tests
+namespace SqlDbEditor.Tests.ViewModels
 {
     /// <summary>
     /// This class contains unit tests for the CustomerEditViewModel class.
@@ -217,7 +218,7 @@ namespace SqlDbEditor.Tests
             viewModel.CustomerRow[CustomerColumnNames.Sales] = Decimal.Parse(sales);
             viewModel.CustomerRow[CustomerColumnNames.CreatedTime] = DateTime.Now;
             viewModel.CustomerRow[CustomerColumnNames.UpdatedTime] = DateTime.Now;
-            bool result = viewModel.FillCustomer();
+            var result = viewModel.FillCustomer();
 
             // Act
             var okResult = viewModel.Ok().Result; // Use Wait to handle async methods            

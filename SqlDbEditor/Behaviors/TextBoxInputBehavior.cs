@@ -14,7 +14,7 @@ namespace SqlDbEditor.Behaviors
     public class TextBoxInputBehavior : Behavior<TextBox>
     {
         #region Constant
-        const NumberStyles validNumberStyles =
+        private const NumberStyles ValidNumberStyles =
             NumberStyles.AllowDecimalPoint |
             NumberStyles.AllowThousands |
             NumberStyles.AllowLeadingSign;
@@ -43,13 +43,13 @@ namespace SqlDbEditor.Behaviors
         /// Gets or sets a value indicating whether only positive decimal input is allowed.
         /// </summary>
         public static readonly DependencyProperty JustPositiveDecimalInputProperty =
-         DependencyProperty.Register("JustPositiveDecimalInput", typeof(bool),
+         DependencyProperty.Register(nameof(JustPositiveDecimalInput), typeof(bool),
          typeof(TextBoxInputBehavior), new FrameworkPropertyMetadata(false));
 
         public bool JustPositiveDecimalInput
         {
-            get { return (bool)GetValue(JustPositiveDecimalInputProperty); }
-            set { SetValue(JustPositiveDecimalInputProperty, value); }
+            get => (bool)GetValue(JustPositiveDecimalInputProperty);
+            set => SetValue(JustPositiveDecimalInputProperty, value);
         }
         #endregion
 
@@ -131,15 +131,15 @@ namespace SqlDbEditor.Behaviors
             if (txt.Text.Length < selectionStart + selectionLength)
                 selectionLength = txt.Text.Length - selectionStart;
 
-            var realtext = txt.Text.Remove(selectionStart, selectionLength);
+            var realText = txt.Text.Remove(selectionStart, selectionLength);
 
             int caretIndex = txt.CaretIndex;
-            if (realtext.Length < caretIndex)
-                caretIndex = realtext.Length;
+            if (realText.Length < caretIndex)
+                caretIndex = realText.Length;
 
-            var newtext = realtext.Insert(caretIndex, input);
+            var newText = realText.Insert(caretIndex, input);
 
-            return newtext;
+            return newText;
         }
 
         /// <summary>
@@ -157,8 +157,8 @@ namespace SqlDbEditor.Behaviors
                     return CheckIsDigit(input);
 
                 case TextBoxInputMode.DecimalInput:
-                    decimal d;
-                    if (input.ToCharArray().Where(x => x == ',').Count() > 1)
+                {
+                    if (input.ToCharArray().Count(singleChar => singleChar == ',') > 1)
                         return false;
 
 
@@ -178,9 +178,9 @@ namespace SqlDbEditor.Behaviors
                             return true;
                     }
 
-                    var result = decimal.TryParse(input, validNumberStyles, CultureInfo.CurrentCulture, out d);
+                    var result = decimal.TryParse(input, ValidNumberStyles, CultureInfo.CurrentCulture, out _);
                     return result;
-
+                }
 
 
                 default: throw new ArgumentException("Unknown TextBoxInputMode");

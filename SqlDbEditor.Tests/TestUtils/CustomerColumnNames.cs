@@ -1,8 +1,7 @@
-﻿namespace SqlDbEditor.Tests
+﻿namespace SqlDbEditor.Tests.TestUtils
 {
     public static class CustomerColumnNames
     {
-        public const string CustomerId = "CustomerId";
         public const string FirstName = "FirstName";
         public const string LastName = "LastName";
         public const string Address1 = "Address1";

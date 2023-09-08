@@ -2,7 +2,7 @@
 using System.Data;
 using static SqlDbEditor.DataAccessLayer.LinkTekTest;
 
-namespace SqlDbEditor.Tests
+namespace SqlDbEditor.Tests.TestUtils
 {
     public class DataTableHelper
     {

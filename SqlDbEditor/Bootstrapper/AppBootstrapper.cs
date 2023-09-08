@@ -31,8 +31,8 @@ namespace SqlDbEditor.Bootstrapper
                 Container.PerRequest<ICustomerDataService, CustomerDataService>();
 
                 // Register the per-request view models
-                Container.PerRequest<ICustomerViewModel, CustomerViewModel>();
-                Container.PerRequest<ICustomerEditViewModel, CustomerEditViewModel>();                
+                Container.PerRequest<CustomerViewModel>();
+                Container.PerRequest<CustomerEditViewModel>();                
             }
             catch(Exception ex)
             {

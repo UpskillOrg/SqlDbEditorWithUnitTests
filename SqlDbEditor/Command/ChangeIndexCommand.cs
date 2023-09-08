@@ -25,7 +25,9 @@ namespace SqlDbEditor.Command
         /// <summary>
         /// Occurs when changes occur that affect whether the command should execute.
         /// </summary>
+#pragma warning disable CS0067 // The event 'ChangeIndexCommand.CanExecuteChanged' is never used and in order to implement to implement ICommand it forces to have this field
         public event EventHandler CanExecuteChanged;
+#pragma warning restore CS0067 // The event 'ChangeIndexCommand.CanExecuteChanged' is never used and in order to implement to implement ICommand it forces to have this field
 
         /// <summary>
         /// Determines whether the command can execute in its current state.
@@ -45,14 +47,5 @@ namespace SqlDbEditor.Command
         {
             _executeAction();
         }
-
-        /// <summary>
-        /// Raises the <see cref="CanExecuteChanged"/> event to indicate that the ability of the command to execute has changed.
-        /// </summary>
-        public void RaiseCanExecuteChanged()
-        {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
-        }
     }
-
 }

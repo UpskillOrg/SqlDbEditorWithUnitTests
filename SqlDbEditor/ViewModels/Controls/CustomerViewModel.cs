@@ -14,7 +14,7 @@ namespace SqlDbEditor.ViewModels.Controls
     /// <summary>
     /// ViewModel for the CustomerView control.
     /// </summary>
-    public class CustomerViewModel : PropertyChangedBase, ICustomerViewModel
+    public class CustomerViewModel : PropertyChangedBase, IDisposable
     {
         #region Private Fields
         /// <summary>
@@ -79,7 +79,7 @@ namespace SqlDbEditor.ViewModels.Controls
         /// <summary> 
         /// Represents the customer edit view model. 
         /// </summary> 
-        private readonly ICustomerEditViewModel _customerEditViewModel;
+        private readonly CustomerEditViewModel _customerEditViewModel;
 
         /// <summary>
         /// Represents the logger
@@ -104,7 +104,7 @@ namespace SqlDbEditor.ViewModels.Controls
             ICustomerDataService customerDataService,
             IDispatcherService dispatcherService,
             IWindowManager windowManager,
-            ICustomerEditViewModel customerEditViewModel,
+            CustomerEditViewModel customerEditViewModel,
             IEventAggregatorService eventAggregatorService
         )
         {

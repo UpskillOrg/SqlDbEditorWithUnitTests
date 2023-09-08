@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SqlDbEditor.ViewModels.Controls;
-using SqlDbEditor.ViewModels;
+﻿using Caliburn.Micro;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SqlDbEditor.Services;
-using Caliburn.Micro;
+using SqlDbEditor.ViewModels;
+using SqlDbEditor.ViewModels.Controls;
 
-namespace SqlDbEditor.Tests
+namespace SqlDbEditor.Tests.ViewModels
 {
     [TestClass]
     public class MainViewModelTests
