@@ -72,6 +72,8 @@ Step 7: Run the Application
 
 Run the application. You should now be able to connect to the LinkTekTest database, view and edit its data using this application.
 
+Note : If the application run on debug mode there will be Validation Exceptions are expected to be thrown so continue running application by click the F% button or in the exception dialog uncheck and say dont break for the Validation Exception type. The Validation exception strategy used to validate the UI fields in the WPF application.
+
 Contributing
 
 If you'd like to contribute to this project, please follow our contributing guidelines (CONTRIBUTING.md).
