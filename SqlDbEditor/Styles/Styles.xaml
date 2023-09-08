@@ -16,55 +16,96 @@
 
     <!-- #Region "Base Styles" -->
 
+    <!-- BaseButtonStyle -->
     <Style x:Key="BaseButtonStyle" TargetType="Button">
+        <!-- Common styling for buttons -->
         <Setter Property="FontSize" Value="20" />
+        <!-- Font size set to 20 -->
         <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="BorderThickness" Value="0"/>
+        <!-- Font weight set to Bold -->
+        <Setter Property="BorderThickness" Value="0" />
+        <!-- Border thickness set to 0 (no border) -->
     </Style>
 
-    <SolidColorBrush x:Key="TextForegroundColor" Color="#333333"/>
+    <!-- TextForegroundColor -->
+    <SolidColorBrush x:Key="TextForegroundColor" Color="#333333" />
+    <!-- Text foreground color set to a shade of gray -->
 
+    <!-- ValidationErrorTemplate -->
     <ControlTemplate x:Key="ValidationErrorTemplate">
+        <!-- Template for rendering validation error messages -->
         <StackPanel>
-            <AdornedElementPlaceholder x:Name="placeHolder"/>
+            <!-- Placeholder for the adorned element -->
+            <AdornedElementPlaceholder x:Name="placeHolder" />
+            <!-- Display the validation error message -->
             <TextBlock Foreground="Purple" FontSize="13" FontStyle="Italic"
-             Text="{Binding ElementName=placeHolder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
+                   Text="{Binding ElementName=placeHolder, Path=AdornedElement.(Validation.Errors)[0].ErrorContent}" />
         </StackPanel>
     </ControlTemplate>
 
+    <!-- CustomMessageBoxBorderStyle -->
     <Style x:Key="CustomMessageBoxBorderStyle" TargetType="Border">
+        <!-- Styling for custom border elements -->
         <Setter Property="BorderBrush" Value="Gray" />
+        <!-- Border brush color set to Gray -->
         <Setter Property="BorderThickness" Value="3" />
-    </Style>
-
-    <Style x:Key="CustomMessageBoxButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="Margin" Value="5" />
-        <Setter Property="Height" Value="30" />
-        <Setter Property="FontSize" Value="15"/>
-        <Setter Property="Foreground" Value="Gray"/>
-    </Style>
-
-    <Style x:Key="CustomMessageBoxTitleTextBlockStyle" TargetType="TextBlock">
-        <Setter Property="Margin" Value="10,0,0,0"/>
-        <Setter Property="Foreground" Value="DarkGray" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="FontSize" Value="18" />
-        <Setter Property="FontWeight" Value="Bold" />
-    </Style>
-
-    <Style x:Key="CustomMessageBoxMessageTextBlockStyle" TargetType="TextBlock">
-        <Setter Property="Margin" Value="15" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="FontSize" Value="15" />
-        <Setter Property="FontWeight" Value="Bold" />
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="MaxWidth" Value="500" />
-        <Setter Property="Width" Value="Auto" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+        <!-- Border thickness set to 3 -->
     </Style>
     <!-- #EndRegion -->
-    
+
+    <!--#region CustomMessageBox Styles -->
+    <!-- CustomMessageBoxButtonStyle -->
+    <Style x:Key="CustomMessageBoxButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <!-- Styling for custom buttons based on BaseButtonStyle -->
+        <Setter Property="Margin" Value="5" />
+        <!-- Margin set to 5 -->
+        <Setter Property="Height" Value="30" />
+        <!-- Height set to 30 -->
+        <Setter Property="FontSize" Value="15" />
+        <!-- Font size set to 15 -->
+        <Setter Property="Foreground" Value="Gray" />
+        <!-- Foreground color set to Gray -->
+    </Style>
+
+    <!-- CustomMessageBoxTitleTextBlockStyle -->
+    <Style x:Key="CustomMessageBoxTitleTextBlockStyle" TargetType="TextBlock">
+        <!-- Styling for TextBlocks used as titles -->
+        <Setter Property="Margin" Value="10,0,0,0" />
+        <!-- Margin set to 10 on the left -->
+        <Setter Property="Foreground" Value="DarkGray" />
+        <!-- Foreground color set to DarkGray -->
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <!-- Vertically centered -->
+        <Setter Property="FontSize" Value="18" />
+        <!-- Font size set to 18 -->
+        <Setter Property="FontWeight" Value="Bold" />
+        <!-- Font weight set to Bold -->
+    </Style>
+
+    <!-- CustomMessageBoxMessageTextBlockStyle -->
+    <Style x:Key="CustomMessageBoxMessageTextBlockStyle" TargetType="TextBlock">
+        <!-- Styling for TextBlocks used for messages -->
+        <Setter Property="Margin" Value="15" />
+        <!-- Margin set to 15 -->
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <!-- Vertically centered -->
+        <Setter Property="FontSize" Value="15" />
+        <!-- Font size set to 15 -->
+        <Setter Property="FontWeight" Value="Bold" />
+        <!-- Font weight set to Bold -->
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <!-- Text wrapping enabled -->
+        <Setter Property="MaxWidth" Value="500" />
+        <!-- Maximum width set to 500 -->
+        <Setter Property="Width" Value="Auto" />
+        <!-- Width set to Auto -->
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <!-- Horizontally centered -->
+        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}" />
+        <!-- Foreground color using TextForegroundColor -->
+    </Style>
+    <!--#endregion-->
+
     <!-- #Region "MainView Styles" -->
 
     <!--This style named MainWindowBorderStyle targets the Border control type and sets its border brush color to Gray and border thickness to 7.-->
@@ -136,20 +177,35 @@
         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}"/>
     </Style>
 
+    <!-- EditNumericalBoxStyle -->
     <Style x:Key="EditNumericalBoxStyle" TargetType="controls:NumericalBox">
+        <!-- This style is designed for a NumericalBox control, which is used for numerical input. -->
+
+        <!-- Triggers -->
         <Style.Triggers>
+            <!-- Trigger that applies when the NumericalBox has a validation error. -->
             <Trigger Property="Validation.HasError" Value="true">
+                <!-- Setter for changing the background color to PaleVioletRed when there's a validation error. -->
                 <Setter Property="Background" Value="PaleVioletRed" />
             </Trigger>
         </Style.Triggers>
+
+        <!-- Setters for common properties -->
+        <!-- Margin sets the outer spacing of the control -->
         <Setter Property="Margin" Value="5,5,5,15"/>
+        <!-- Height and Width define the dimensions of the control -->
         <Setter Property="Height" Value="30"/>
         <Setter Property="Width" Value="200"/>
+        <!-- FontSize sets the font size of the content -->
         <Setter Property="FontSize" Value="16"/>
+        <!-- Foreground defines the text color -->
         <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+        <!-- VerticalContentAlignment aligns the text vertically within the control -->
         <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <!-- Validation.ErrorTemplate specifies the visual template for displaying validation errors. -->
         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}"/>
     </Style>
+
 
     <!--This style named EditButtonStyle targets the Button control type and sets its margin, height, and width.-->
     <Style x:Key="EditButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
