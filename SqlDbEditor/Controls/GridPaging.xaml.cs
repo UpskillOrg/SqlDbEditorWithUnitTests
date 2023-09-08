@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace SqlDbEditor.Controls
@@ -341,7 +342,7 @@ namespace SqlDbEditor.Controls
         /// Handles the selection changed event for the page size combo box.
         /// Updates the page size property and executes the change index command if applicable.
         /// </summary>
-        private void PageSizeChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void PageSizeChanged(object sender, SelectionChangedEventArgs e)
         {
             var items = e.AddedItems;
             if (items == null || items.Count <= 0) return;

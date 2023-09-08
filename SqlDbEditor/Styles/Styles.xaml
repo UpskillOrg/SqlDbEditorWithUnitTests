@@ -32,6 +32,37 @@
         </StackPanel>
     </ControlTemplate>
 
+    <Style x:Key="CustomMessageBoxBorderStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="Gray" />
+        <Setter Property="BorderThickness" Value="3" />
+    </Style>
+
+    <Style x:Key="CustomMessageBoxButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="Foreground" Value="Gray"/>
+    </Style>
+
+    <Style x:Key="CustomMessageBoxTitleTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Margin" Value="10,0,0,0"/>
+        <Setter Property="Foreground" Value="DarkGray" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="CustomMessageBoxMessageTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Margin" Value="15" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="MaxWidth" Value="500" />
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+    </Style>
     <!-- #EndRegion -->
     
     <!-- #Region "MainView Styles" -->

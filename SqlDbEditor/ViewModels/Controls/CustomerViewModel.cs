@@ -85,6 +85,9 @@ namespace SqlDbEditor.ViewModels.Controls
         /// Represents the logger
         /// </summary>
         private readonly ILog _logger;
+
+        private bool _isEditInProgress;
+
         #endregion
 
         #region Constrcutor
@@ -132,6 +135,19 @@ namespace SqlDbEditor.ViewModels.Controls
             set
             {
                 _totalCustomers = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        /// <summary>
+        /// If the row is edited then this will set to true otherwise false
+        /// </summary>
+        public bool IsEditInProgress
+        {
+            get => _isEditInProgress;
+            set
+            {
+                _isEditInProgress = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -283,7 +299,9 @@ namespace SqlDbEditor.ViewModels.Controls
                 if (filledCustomer)
                 {
                     _logger?.Info("Complete populating the fields in the edit form");
+                    IsEditInProgress = true;
                     var result = await _windowManager.ShowDialogAsync(_customerEditViewModel);
+                    IsEditInProgress = false;
                     _logger?.Info("Edit dialog is closed and result the dialog returns is:" + result);
                 }
                 else

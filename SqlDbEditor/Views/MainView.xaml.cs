@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Windows;
 using System.Windows.Input;
+using SqlDbEditor.Controls;
 
 namespace SqlDbEditor.Views
 {
@@ -25,7 +26,7 @@ namespace SqlDbEditor.Views
 
         public async Task HandleAsync(ErrorMessage message, CancellationToken cancellationToken)
         {
-            MessageBox.Show(message.Message, message.Type);
+            CustomMessageBox.Show(message.Message, message.Type);
             await Task.CompletedTask;
         }
 

@@ -92,7 +92,7 @@ namespace SqlDbEditor.Controls
 
             if (!IsTextValid(RgxLostFocusValid, RgxSaveLost, Text, out var longestValidText))
             {
-                this.Text = longestValidText;
+                Text = longestValidText;
             }
         }
         #endregion Overrides

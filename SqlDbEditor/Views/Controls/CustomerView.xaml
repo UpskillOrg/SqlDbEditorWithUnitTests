@@ -70,5 +70,10 @@
             PageSize="{Binding PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             PageIndex="{Binding PageIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             ChangedIndexCommand="{Binding ChangeIndexCommand}"/>
+        
+        <Grid Grid.Row="0" 
+              Grid.RowSpan="3" 
+              Background="#80000000" 
+              Visibility="{Binding Path=IsEditInProgress, Converter={StaticResource BooleanToVisibilityConverter}}" />
     </Grid>
 </UserControl>
