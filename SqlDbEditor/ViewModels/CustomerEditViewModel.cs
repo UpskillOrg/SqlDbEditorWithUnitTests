@@ -162,9 +162,9 @@ namespace SqlDbEditor.ViewModels
         {
             get => _firstName;
             set
-            {
-                ValidateName("first name", value, 30);
+            {                
                 _firstName = value;
+                ValidateName("first name", _firstName, 30);
                 NotifyOfPropertyChange();
             }
         }
@@ -177,8 +177,8 @@ namespace SqlDbEditor.ViewModels
             get => _lastName;
             set
             {
-                ValidateName("last name", value, 30);
                 _lastName = value;
+                  ValidateName("last name", _lastName, 30);
                 NotifyOfPropertyChange();
             }
         }
@@ -191,8 +191,8 @@ namespace SqlDbEditor.ViewModels
             get => _address1;
             set
             {
-                ValidateAddress("address1", value, 40);
                 _address1 = value;
+                ValidateAddress("address1", _address1, 40);
                 NotifyOfPropertyChange();
             }
         }
@@ -205,8 +205,8 @@ namespace SqlDbEditor.ViewModels
             get => _address2;
             set
             {
-                ValidateAddress("address2", value, 40);
                 _address2 = value;
+                ValidateAddress("address2", _address2, 40);
                 NotifyOfPropertyChange();
             }
         }
@@ -219,8 +219,8 @@ namespace SqlDbEditor.ViewModels
             get => _city;
             set
             {
-                ValidateCity("city", value, 50);
                 _city = value;
+                ValidateCity("city", _city, 50);
                 NotifyOfPropertyChange();
             }
         }
@@ -233,8 +233,8 @@ namespace SqlDbEditor.ViewModels
             get => _zip;
             set
             {
-                ValidateZip("zip", value, 10);
                 _zip = value;
+                ValidateZip("zip", _zip, 10);
                 NotifyOfPropertyChange();
             }
         }
@@ -247,8 +247,8 @@ namespace SqlDbEditor.ViewModels
             get => _phone;
             set
             {
-                ValidatePhone("phone", value, 20);
                 _phone = value;
+                ValidatePhone("phone", _phone, 20);
                 NotifyOfPropertyChange();
             }
         }
@@ -261,8 +261,8 @@ namespace SqlDbEditor.ViewModels
             get => _age;
             set
             {
-                ValidateAge(value);
                 _age = value;
+                ValidateAge(_age);
                 NotifyOfPropertyChange();
             }
         }
@@ -275,8 +275,8 @@ namespace SqlDbEditor.ViewModels
             get => _sales;
             set
             {
-                ValidateSales(value);
                 _sales = value;
+                ValidateSales(_sales);
                 NotifyOfPropertyChange();
             }
         }
@@ -289,8 +289,8 @@ namespace SqlDbEditor.ViewModels
             get => _selectedState;
             set
             {
-                ValidateState("state", value, 2);
                 _selectedState = value;
+                ValidateState("state", _selectedState, 2);
                 NotifyOfPropertyChange();
             }
         }
