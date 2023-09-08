@@ -43,7 +43,7 @@ namespace SqlDbEditor.Tests
                 eventAggregatorMock.Object
             );
 
-            customerDataServiceMock.Setup(service => service.CustomerTableAdapter.GetCustomers()).Returns(DataTableHelper.CustomerDataTable);
+            customerDataServiceMock.Setup(service => service.CustomerTableAdapter.GetCustomers(It.IsAny<int?>(), It.IsAny<int?>())).Returns(DataTableHelper.CustomerDataTable);
 
             // Act
             await viewModel.LoadCustomers();
@@ -62,7 +62,7 @@ namespace SqlDbEditor.Tests
             var dispatcherServiceMock = new Mock<IDispatcherService>();
             var eventAggregatorMock = new Mock<IEventAggregator>();
 
-            customerDataServiceMock.Setup(service => service.CustomerTableAdapter.GetCustomers()).Returns(DataTableHelper.CustomerDataTable);
+            customerDataServiceMock.Setup(service => service.CustomerTableAdapter.GetCustomers(It.IsAny<int?>(), It.IsAny<int?>())).Returns(DataTableHelper.CustomerDataTable);
 
             var viewModel = new CustomerViewModel(
                 customerDataServiceMock.Object,
@@ -72,7 +72,7 @@ namespace SqlDbEditor.Tests
                 eventAggregatorMock.Object
             );
 
-            customerDataServiceMock.Setup(service => service.CustomerTableAdapter.GetCustomers())
+            customerDataServiceMock.Setup(service => service.CustomerTableAdapter.GetCustomers(It.IsAny<int?>(), It.IsAny<int?>()))
                 .Throws(MakeSqlException());
 
             // Act

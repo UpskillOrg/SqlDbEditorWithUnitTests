@@ -1,11 +1,12 @@
 ﻿using Caliburn.Micro;
+using SqlDbEditor.Command;
 using SqlDbEditor.Messages;
 using SqlDbEditor.Services;
 using System;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
-using System.Web.Profile;
+using System.Windows.Input;
 using static SqlDbEditor.DataAccessLayer.LinkTekTest;
 
 namespace SqlDbEditor.ViewModels.Controls
@@ -16,6 +17,11 @@ namespace SqlDbEditor.ViewModels.Controls
     public class CustomerViewModel : PropertyChangedBase, ICustomerViewModel
     {
         #region Private Fields
+        /// <summary>
+        /// Represents whether the data loaded first time with the manual invocation
+        /// </summary>
+        private bool _loadInitialized = false;
+
         /// <summary>
         /// Represents a private field for event aggregator
         /// </summary>
@@ -60,6 +66,26 @@ namespace SqlDbEditor.ViewModels.Controls
         /// Represents the logger
         /// </summary>
         private ILog _logger;
+
+        /// <summary>
+        /// This field indicates the number of items you want to display on each page of a paginated list. 
+        /// For example, if you're displaying a list of customer records and pageSize is 
+        /// set to 10, each page will show 10 customer records.
+        /// </summary>
+        private int _pageSize;
+
+        /// <summary>
+        /// This field represents the starting index (offset) of the current page in the paginated list. 
+        /// It helps in determining which subset of data to display for the current page.
+        /// </summary>
+        private int _pageIndex;
+
+        /// <summary>
+        /// This field reflects the total number of customers in the entire dataset or list. 
+        /// It provides the count of all available customers, irrespective of how they are divided across pages.
+        /// </summary>
+        private int? _totalCustomers;
+
         #endregion
 
         #region Constrcutor
@@ -83,12 +109,64 @@ namespace SqlDbEditor.ViewModels.Controls
             _dispatcherService = dispatcherService;
             _customerEditViewModel = customerEditViewModel;
             _windowManager = windowManager;
-            _logger = _logger = LogManager.GetLog(typeof(CustomerViewModel)); ;
+            _logger = _logger = LogManager.GetLog(typeof(CustomerViewModel));
+            ChangeIndexCommand = new ChangeIndexCommand(
+                async () => {
+                    await InternalLoadCustomers();
+                }
+            );
             _logger?.Info("CustomerViewModel contractor initialization is completed.");
         }
         #endregion
 
         #region Public Properties
+        /// <summary>
+        /// Change Index Command
+        /// </summary>
+        public ICommand ChangeIndexCommand { get; set; }
+
+        /// <summary>
+        /// This field reflects the total number of customers in the entire dataset or list. 
+        /// It provides the count of all available customers, irrespective of how they are divided across pages.
+        /// </summary>
+        public int? TotalCustomers
+        {
+            get => _totalCustomers;
+            set
+            {
+                _totalCustomers = value;
+                NotifyOfPropertyChange(nameof(TotalCustomers));
+            }
+        }
+
+        /// <summary>
+        /// This field represents the starting index (offset) of the current page in the paginated list. 
+        /// It helps in determining which subset of data to display for the current page.
+        /// </summary>
+        public int PageSize
+        {
+            get => _pageSize;
+            set
+            {
+                _pageSize = value;
+                NotifyOfPropertyChange(nameof(PageSize));
+            }
+        }
+
+        /// <summary>
+        /// This field represents the starting index (offset) of the current page in the paginated list. 
+        /// It helps in determining which subset of data to display for the current page.
+        /// </summary>
+        public int PageIndex
+        {
+            get => _pageIndex;
+            set
+            {
+                _pageIndex = value;
+                NotifyOfPropertyChange(nameof(PageIndex));
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether customers can be loaded.
         /// </summary>
@@ -119,20 +197,63 @@ namespace SqlDbEditor.ViewModels.Controls
 
         #region Public Methods
         /// <summary>
-        /// Loads the customers asynchronously.
+        /// This method will be called once the corresponding view gets loaded
         /// </summary>
-        public async Task LoadCustomers()
+        public async Task Loaded()
         {
-            CustomerTable?.Clear();
             CanLoadCustomers = false;
 
             await Task.Factory.StartNew(async () =>
             {
                 try
                 {
+                    _logger?.Info("Start fetching the customer count from the database");                    
+                    var totalCustomers = _customerDataService.CustomerTableAdapter.GetCoustomersCount();
+                    _dispatcherService.Invoke(() => TotalCustomers = totalCustomers);
+                    _logger?.Info("Completed fetching the customer count from the database");
+                }
+                catch (SqlException ex)
+                {
+                    await PublishOnUIThreadAsync(new ErrorMessage { Message = ex.Message, Type = "Sql Connection Error" });
+                }
+                catch (Exception ex)
+                {
+                    _logger?.Error(ex);
+                }
+            });            
+
+            CanLoadCustomers = true;
+        }
+
+        private async Task InternalLoadCustomers()
+        {
+            if (_loadInitialized)
+            {
+                await Loaded();
+                await LoadCustomers();
+            }            
+        }
+
+        /// <summary>
+        /// Loads the customers asynchronously.
+        /// </summary>
+        public async Task LoadCustomers()
+        {
+            _loadInitialized = true;
+            CanLoadCustomers = false;
+            
+            await Task.Factory.StartNew(async () =>
+            {
+                try
+                {
                     _logger?.Info("Start fetching the customer information from the database");
-                    var customers = _customerDataService.CustomerTableAdapter.GetCustomers();
-                    _dispatcherService.Invoke(() => CustomerTable = customers);
+                    var customers = _customerDataService.CustomerTableAdapter.GetCustomers(PageIndex, PageSize);
+                    _dispatcherService.Invoke(
+                        () => {
+                            CustomerTable?.Clear();
+                            CustomerTable = customers;                            
+                        }
+                    );
                     _logger?.Info("Completed fetching the customer information from the database");
                 }
                 catch (SqlException ex)
@@ -144,6 +265,8 @@ namespace SqlDbEditor.ViewModels.Controls
                     _logger?.Error(ex);
                 }
             });
+
+            await Loaded();
 
             CanLoadCustomers = true;
         }

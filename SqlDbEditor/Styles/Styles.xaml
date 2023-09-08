@@ -11,6 +11,8 @@
     <sqlDbEditor:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+    <sqlDbEditor:BoolToFlowDirectionConverter x:Key="BoolToFlowDirectionConverter" />
     <!-- #EndRegion -->
 
     <!-- #Region "Base Styles" -->
@@ -138,6 +140,8 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
         <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}"/>
+        <Setter Property="Background" Value="DarkGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
     </Style>
 
     <!-- #EndRegion -->
@@ -214,5 +218,35 @@
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
-    <!-- #EndRegion -->    
+
+    <Style x:Key="PagingTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="DarkGray" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="3,0" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+
+    <!--This style named PagingComboStyle targets the ComboBox control type and sets its margin, height, and width.-->
+    <Style x:Key="PagingComboStyle" TargetType="ComboBox">
+        <Setter Property="Margin" Value="5,5,5,5" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Background" Value="DarkGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{StaticResource TextForegroundColor}"/>
+        <Setter Property="Validation.ErrorTemplate" Value="{StaticResource ValidationErrorTemplate}"/>
+    </Style>
+    <!-- #EndRegion -->
+
+    <Style x:Key="PaginationButtonStyle" TargetType="Button">
+        <Setter Property="Height" Value="23" />
+        <Setter Property="Width" Value="23" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="1,1,1,1" />
+    </Style>
 </ResourceDictionary>

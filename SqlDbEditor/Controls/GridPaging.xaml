@@ -1,0 +1,94 @@
+﻿<UserControl x:Class="SqlDbEditor.Controls.GridPaging"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="36" d:DesignWidth="722">
+    <Border BorderThickness="2" Background="DimGray">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+            <TextBlock Text="Total Rows  - " Style="{StaticResource PagingTextBlockStyle}"  />
+            <TextBlock Text="-" 
+                Name="TotalRowsTextBlock" VerticalAlignment="Bottom" 
+                Style="{StaticResource PagingTextBlockStyle}" 
+                ToolTip="Total Rows" />
+        </StackPanel>
+
+        <Grid Name="PaginationGrid" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="1" 
+                       Grid.Column="2" 
+                       Style="{StaticResource PagingTextBlockStyle}" 
+                       Name="CurrentPageTextBlock" 
+                       ToolTip="Actual Page" />
+
+            <TextBlock Text="-" 
+                       Grid.Column="3" 
+                       Style="{StaticResource PagingTextBlockStyle}" />
+
+            <TextBlock Text="1" 
+                    Grid.Column="4"                         
+                    Name="TotalPageTextBlock" 
+                    Style="{StaticResource PagingTextBlockStyle}"                        
+                    ToolTip="Total Pages" />
+            
+            <Button Content="&gt;&gt;" 
+                    Grid.Column="6" 
+                    Style="{StaticResource PaginationButtonStyle}" 
+                    HorizontalAlignment="Left"
+                    ToolTip="Move to last page"
+                    Name="LastPageButton"                     
+                    Click="OnButtonLastClick" />
+            
+            <Button Content="&gt;" 
+                    Grid.Column="5" 
+                    ToolTip="Move to next page"
+                    Style="{StaticResource PaginationButtonStyle}"     
+                    Name="NextPageButton" 
+                    Click="OnButtonNextClick" />
+            
+            <Button Content="&lt;" 
+                    Grid.Column="1" 
+                    ToolTip="Move to prvious page"
+                    Style="{StaticResource PaginationButtonStyle}"                    
+                    Name="PreviousPageButton" 
+                    Click="OnButtonPreviousClick" />
+            
+            <Button Content="&lt;&lt;" 
+                    Grid.Column="0" 
+                    ToolTip="Move to first page"
+                    Style="{StaticResource PaginationButtonStyle}"                    
+                    HorizontalAlignment="Right"                     
+                    Name="FirstPageButton" 
+                    Click="OnButtonFirstClick" />
+        </Grid>
+        
+        <!-- Page Size Selector -->
+        <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" 
+                    VerticalAlignment="Center">
+                <ComboBox Width="100"                      
+                    ToolTip="Rows x Page" 
+                    Name="PageSizeComboBox" 
+                    Style="{StaticResource PagingComboStyle}"
+                    IsEditable="False" SelectionChanged="PageSizeChanged"
+                    VerticalAlignment="Center">
+                </ComboBox>
+        </StackPanel>
+    </Grid>
+    </Border>
+</UserControl>

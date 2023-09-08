@@ -75,6 +75,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\GridPaging.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\Styles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -95,12 +99,18 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\GridPaging.xaml.cs">
+      <DependentUpon>GridPaging.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Behaviours\RegexInputValidatorBehavior.cs" />
     <Compile Include="Behaviours\TextBoxInputBehavior.cs" />
     <Compile Include="Behaviours\TextBoxInputMode.cs" />
     <Compile Include="Bootstrapper\AppBootstrapper.cs" />
     <Compile Include="Bootstrapper\Bootstrapper.cs" />
+    <Compile Include="Command\ChangeIndexCommand.cs" />
     <Compile Include="Controls\NumericalBox.cs" />
+    <Compile Include="Converters\BoolToFlowDirectionConverter.cs" />
     <Compile Include="DataAccessLayer\LinkTekTest.cs">
       <DependentUpon>LinkTekTest.xsd</DependentUpon>
     </Compile>

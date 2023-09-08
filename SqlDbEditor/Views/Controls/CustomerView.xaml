@@ -5,12 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             xmlns:resources="clr-namespace:SqlDbEditor.Properties"
+             xmlns:resources="clr-namespace:SqlDbEditor.Properties" xmlns:controls="clr-namespace:SqlDbEditor.Controls"
+             cal:Message.Attach="[Event Loaded] = [Action Loaded()]"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Button Grid.Row="0" 
                 x:Name="LoadCustomers" 
@@ -18,7 +20,7 @@
                 Style="{StaticResource LoadCustomersStyle}" 
                 Content="{x:Static resources:Resources.Load}" />
         <DataGrid Style="{StaticResource CustomerDataGridStyle}"
-                  RowHeaderStyle="{StaticResource CustomerRowHeaderStyle}" 
+                  RowHeaderStyle="{StaticResource CustomerRowHeaderStyle}"                   
                   ColumnHeaderStyle="{StaticResource CustomerColumnHeaderStyle}"                  
                   Grid.Row="1" 
                   x:Name="CustomerTable">
@@ -27,6 +29,11 @@
                     <Setter Property="cal:Message.Attach" Value="[Event MouseDoubleClick] = [Action EditItem($dataContext)]" />
                 </Style>
             </DataGrid.RowStyle>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Reload" ToolTip="Reload the customers" cal:Message.Attach="[Event Click] = [Action LoadCustomers()]" />
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="{x:Static resources:Resources.FirstName}" Binding="{Binding FirstName}"/>
                 <DataGridTextColumn Header="{x:Static resources:Resources.LastName}" Binding="{Binding LastName}"/>
@@ -46,11 +53,22 @@
                     Grid.Row="1">
             <Border BorderThickness="1" BorderBrush="Gray">
                 <StackPanel>
-                    <ProgressBar Margin="5,10,5,5" Style="{StaticResource ProgressBarStyle}" />
+                    <ProgressBar Margin="5,10,5,5" 
+                                 Style="{StaticResource ProgressBarStyle}" 
+                                 FlowDirection="{Binding ElementName=gridPaging, Path=PreviousOrFirstPage, Converter={StaticResource BoolToFlowDirectionConverter}}" />
                     <TextBlock Margin="5" Text="{x:Static resources:Resources.RetrivingCustomerMessage}"
                            Style="{StaticResource ProgressIndicatorTextBlockStyle}" />
                 </StackPanel>
             </Border>
         </StackPanel>
+        <controls:GridPaging
+            Visibility="{Binding Path=HasItems, ElementName=CustomerTable, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
+            Grid.Row="2" 
+            x:Name="gridPaging"
+            Margin="10"
+            TotalCount="{Binding TotalCustomers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            PageSize="{Binding PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            PageIndex="{Binding PageIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            ChangedIndexCommand="{Binding ChangeIndexCommand}"/>
     </Grid>
 </UserControl>
