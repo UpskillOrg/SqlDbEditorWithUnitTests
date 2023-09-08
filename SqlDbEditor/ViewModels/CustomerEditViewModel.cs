@@ -20,32 +20,17 @@ namespace SqlDbEditor.ViewModels
         /// <summary>
         /// Represents that whether the required validations are satisfied and the data can be updated to the customer table
         /// </summary>
-        private bool _canOk = false;
+        private bool _canOk;
 
         /// <summary>
         /// Represents whether the customer update is completed or not
         /// </summary>
         private bool _isUpdateProgress;
 
-        /// <summary>
-        /// Represents a State provider service
-        /// </summary>
-        private IStateProviderService _stateProviderService;
-
-        /// <summary>
-        /// Represents a event aggregator
-        /// </summary>
-        private IEventAggregator _eventAggregator;
-
         /// <summary> 
         /// A flag to indicate whether the object is disposed
         ///</summary> 
-        private bool disposed = false;
-
-        /// <summary>
-        /// Represents the customer data service.
-        /// </summary>
-        private ICustomerDataService _customerDataService = null;
+        private bool _disposed;
 
         /// <summary>
         /// Represents the current customer row.
@@ -105,23 +90,39 @@ namespace SqlDbEditor.ViewModels
         /// <summary>
         /// Represents a logger configured with the bootstrap
         /// </summary>
-        private ILog _logger = null;
+        private readonly ILog _logger;
+
+        /// <summary>
+        /// Represents a State provider service
+        /// </summary>
+        private readonly IStateProviderService _stateProviderService;
+
+        /// <summary>
+        /// Represents a event aggregator service
+        /// </summary>
+        private readonly IEventAggregatorService _eventAggregatorService;
+
+        /// <summary>
+        /// Represents the customer data service.
+        /// </summary>
+        private readonly ICustomerDataService _customerDataService;
         #endregion
 
         #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the CustomerEditViewModel class with the specified data row view and customer data service.
         /// </summary>       
         /// <param name="customerDataService">The customer data service that provides access to the database.</param>
         /// <param name="stateProviderService">The state provider service that provides all available states in US.</param>
-        /// <param name="eventAggregator">Represents the instance of event aggregator.</param>
-        public CustomerEditViewModel(ICustomerDataService customerDataService, IStateProviderService stateProviderService, IEventAggregator eventAggregator)
+        /// <param name="eventAggregatorService">Represents the instance of event aggregator service.</param>
+        public CustomerEditViewModel(ICustomerDataService customerDataService, IStateProviderService stateProviderService, IEventAggregatorService eventAggregatorService)
         {
             _stateProviderService = stateProviderService;
-            _eventAggregator = eventAggregator;
+            _eventAggregatorService = eventAggregatorService;
             _customerDataService = customerDataService;
-            _logger?.Info("States retrieved from data base are :", State);
             _logger = LogManager.GetLog(typeof(CustomerDataService));
+            _logger?.Info("States retrieved from data base are :", State);
         }
         #endregion
 
@@ -145,20 +146,14 @@ namespace SqlDbEditor.ViewModels
             set
             {
                 _customerRow = value;
-                NotifyOfPropertyChange(nameof(CustomerRow));
+                NotifyOfPropertyChange();
             }
         }
 
         /// <summary>
         /// Gets or sets the collection of states that the customer can choose from.
         /// </summary>
-        public BindableCollection<string> State
-        {
-            get
-            {
-                return new BindableCollection<string>(_stateProviderService.States);
-            }
-        }
+        public BindableCollection<string> State => new BindableCollection<string>(_stateProviderService.States);
 
         /// <summary>
         /// Gets or sets the first name of the customer.
@@ -170,7 +165,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidateName("first name", value, 30);
                 _firstName = value;
-                NotifyOfPropertyChange(nameof(FirstName));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -184,7 +179,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidateName("last name", value, 30);
                 _lastName = value;
-                NotifyOfPropertyChange(nameof(LastName));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -198,7 +193,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidateAddress("address1", value, 40);
                 _address1 = value;
-                NotifyOfPropertyChange(nameof(Address1));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -212,7 +207,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidateAddress("address2", value, 40);
                 _address2 = value;
-                NotifyOfPropertyChange(nameof(Address2));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -226,7 +221,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidateCity("city", value, 50);
                 _city = value;
-                NotifyOfPropertyChange(nameof(City));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -240,7 +235,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidateZip("zip", value, 10);
                 _zip = value;
-                NotifyOfPropertyChange(nameof(Zip));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -254,7 +249,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidatePhone("phone", value, 20);
                 _phone = value;
-                NotifyOfPropertyChange(nameof(Phone));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -268,7 +263,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidateAge(value);
                 _age = value;
-                NotifyOfPropertyChange(nameof(Age));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -282,7 +277,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidateSales(value);
                 _sales = value;
-                NotifyOfPropertyChange(nameof(Sales));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -296,7 +291,7 @@ namespace SqlDbEditor.ViewModels
             {
                 ValidateState("state", value, 2);
                 _selectedState = value;
-                NotifyOfPropertyChange(nameof(SelectedState));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -309,7 +304,7 @@ namespace SqlDbEditor.ViewModels
             set
             {
                 _isUpdateProgress = value;
-                NotifyOfPropertyChange(nameof(IsUpdateProgress));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -318,14 +313,11 @@ namespace SqlDbEditor.ViewModels
         /// </summary>
         public bool CanOk
         {
-            get
-            {
-                return _canOk;
-            }
+            get => _canOk;
             set
             {
                 _canOk = value;
-                NotifyOfPropertyChange(nameof(CanOk));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -337,7 +329,7 @@ namespace SqlDbEditor.ViewModels
         /// </summary>
         public async Task<OkResult> Ok()
         {
-            OkResult okResult = OkResult.Passed;
+            OkResult okResult;
             try
             {
                 if (ValidateAllFields())
@@ -369,7 +361,7 @@ namespace SqlDbEditor.ViewModels
                         catch (Exception ex)
                         {
                             _logger.Error(ex);
-                            _eventAggregator.PublishOnUIThreadAsync(new ErrorMessage { Type = "Database Error", Message = ex.Message });
+                            _eventAggregatorService.PublishOnUIThreadAsync(new ErrorMessage { Type = "Database Error", Message = ex.Message });
                         }
 
                         return -1;
@@ -493,7 +485,7 @@ namespace SqlDbEditor.ViewModels
         protected virtual void Dispose(bool disposing)
         {
             // Check if the object is already disposed
-            if (!disposed)
+            if (!_disposed)
             {
                 // If disposing is true, release managed resources
                 if (disposing)
@@ -503,7 +495,7 @@ namespace SqlDbEditor.ViewModels
                 }
 
                 // Set the flag to true
-                disposed = true;
+                _disposed = true;
             }
         }
         #endregion
@@ -539,7 +531,7 @@ namespace SqlDbEditor.ViewModels
             catch (ValidationException ex)
             {
                 // Publish an error message to the UI thread.
-                _eventAggregator.PublishOnUIThreadAsync(new ErrorMessage { Message = ex.Message, Type = "Validation Error" });
+                _eventAggregatorService.PublishOnUIThreadAsync(new ErrorMessage { Message = ex.Message, Type = "Validation Error" });
                 validationResult = false;
             }
             catch (Exception ex)
@@ -565,12 +557,12 @@ namespace SqlDbEditor.ViewModels
             if (textToBeValidated == null || string.IsNullOrWhiteSpace(textToBeValidated))
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("Please enter your {0}.", fieldName));
+                throw new ValidationException($"Please enter your {fieldName}.");
             }
             else if (textToBeValidated.Length > textLength)
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("{0} cannot be longer than {1} characters.", fieldName, textLength));
+                throw new ValidationException($"{fieldName} cannot be longer than {textLength} characters.");
             }
 
             CanOk = true;
@@ -592,7 +584,7 @@ namespace SqlDbEditor.ViewModels
             if (!Regex.Match(nameToBeValidated, RegExConstants.NameRegEx).Success)
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("Please enter a valid {0}.", fieldName));
+                throw new ValidationException($"Please enter a valid {fieldName}.");
             }
 
             CanOk = true;
@@ -613,7 +605,7 @@ namespace SqlDbEditor.ViewModels
             if (!Regex.Match(addressToBeValidated, RegExConstants.AddressRegEx).Success)
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("Please enter a valid {0}.", fieldName));
+                throw new ValidationException($"Please enter a valid {fieldName}.");
             }
 
             CanOk = true;
@@ -635,7 +627,7 @@ namespace SqlDbEditor.ViewModels
             if (!Regex.Match(cityToBeValidated, RegExConstants.CityRegEx).Success)
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("Please enter a valid {0}.", fieldName));
+                throw new ValidationException($"Please enter a valid {fieldName}.");
             }
 
             CanOk = true;
@@ -653,21 +645,21 @@ namespace SqlDbEditor.ViewModels
             if (stateToBeValidated == null || string.IsNullOrWhiteSpace(stateToBeValidated))
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("Please select your {0}.", fieldName));
+                throw new ValidationException($"Please select your {fieldName}.");
             }
 
             // Validate that the state is not longer than the specified length.
             if (stateToBeValidated.Length > textLength)
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("{0} cannot be longer than {1} characters.", fieldName, textLength));
+                throw new ValidationException($"{fieldName} cannot be longer than {textLength} characters.");
             }
 
             // Validate that the state is a valid state name.
             if (!_stateProviderService.States.Contains(stateToBeValidated))
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("Please enter a valid {0}.", fieldName));
+                throw new ValidationException($"Please enter a valid {fieldName}.");
             }
 
             CanOk = true;
@@ -689,7 +681,7 @@ namespace SqlDbEditor.ViewModels
             if (!Regex.Match(zipToBeValidated, RegExConstants.ZipRegEx).Success)
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("Please enter a valid {0}.", fieldName));
+                throw new ValidationException($"Please enter a valid {fieldName}.");
             }
 
             CanOk = true;
@@ -711,7 +703,7 @@ namespace SqlDbEditor.ViewModels
             if (!Regex.Match(phoneToBeValidated, RegExConstants.PhoneRexEx).Success)
             {
                 CanOk = false;
-                throw new ValidationException(string.Format("Please enter a valid {0}.", fieldName));
+                throw new ValidationException($"Please enter a valid {fieldName}.");
             }
 
             CanOk = true;

@@ -7,18 +7,18 @@ namespace SqlDbEditor.Services
     /// <summary>
     /// Represents a service for accessing customer data.
     /// </summary>
-    public class CustomerDataService : ICustomerDataService, IDisposable
+    public class CustomerDataService : ICustomerDataService
     {
         #region Private Fields
         /// <summary>
         /// A flag to indicate whether the object is disposed
         /// </summary>
-        private bool disposed = false;
+        private bool _disposed;
 
         /// <summary>
         /// Represents a logger configured with the bootstrap
         /// </summary>
-        private ILog _logger = null;
+        private readonly ILog _logger;
         #endregion
         
         #region Public Fields
@@ -39,7 +39,7 @@ namespace SqlDbEditor.Services
                 _logger = LogManager.GetLog(typeof(CustomerDataService));
                 // Create an instance of CustomerTableAdapter to access customer data
                 CustomerTableAdapter = new CustomerTableAdapter();
-                _logger?.Info("CustomerDataService contructor is initialized");
+                _logger?.Info("CustomerDataService constructor is initialized");
             }
             catch(Exception ex)
             {
@@ -66,7 +66,7 @@ namespace SqlDbEditor.Services
         protected virtual void Dispose(bool disposing)
         {
             // Check if the object is already disposed
-            if (!disposed)
+            if (!_disposed)
             {
                 // If disposing is true, release managed resources
                 if (disposing)
@@ -76,7 +76,7 @@ namespace SqlDbEditor.Services
                 }
 
                 // Set the flag to true
-                disposed = true;
+                _disposed = true;
             }
         }
         #endregion

@@ -4,19 +4,19 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Text.RegularExpressions;
 
-namespace SqlDbEditor.Behaviours
+namespace SqlDbEditor.Behaviors
 {
     public class RegexInputValidatorBehavior : Behavior<TextBox>
     {
         public string MatchRegEx
         {
-            get { return (string)GetValue(MatchRegExProperty); }
-            set { SetValue(MatchRegExProperty, value); }
+            get => (string)GetValue(MatchRegExProperty);
+            set => SetValue(MatchRegExProperty, value);
         }
 
         public static readonly DependencyProperty MatchRegExProperty =
             DependencyProperty.Register(
-                "MatchRegEx", 
+                nameof(MatchRegEx), 
                 typeof(string), 
                 typeof(RegexInputValidatorBehavior), 
                 new PropertyMetadata(string.Empty)
@@ -75,11 +75,10 @@ namespace SqlDbEditor.Behaviours
 
         private void AssociatedObjectPreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (!this.IsValidInput(this.GetText(e.Text)))
-            {
-                System.Media.SystemSounds.Beep.Play();
-                e.Handled = true;
-            }
+            if (IsValidInput(GetText(e.Text))) return;
+
+            System.Media.SystemSounds.Beep.Play();
+            e.Handled = true;
         }
 
         /// <summary>
@@ -91,17 +90,17 @@ namespace SqlDbEditor.Behaviours
         {
             var txt = this.AssociatedObject;
 
-            int selectionStart = txt.SelectionStart;
+            var selectionStart = txt.SelectionStart;
             if (txt.Text.Length < selectionStart)
                 selectionStart = txt.Text.Length;
 
-            int selectionLength = txt.SelectionLength;
+            var selectionLength = txt.SelectionLength;
             if (txt.Text.Length < selectionStart + selectionLength)
                 selectionLength = txt.Text.Length - selectionStart;
 
             var realText = txt.Text.Remove(selectionStart, selectionLength);
 
-            int caretIndex = txt.CaretIndex;
+            var caretIndex = txt.CaretIndex;
             if (realText.Length < caretIndex)
                 caretIndex = realText.Length;
 

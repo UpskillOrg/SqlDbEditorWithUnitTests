@@ -20,52 +20,22 @@ namespace SqlDbEditor.ViewModels.Controls
         /// <summary>
         /// Represents whether the data loaded first time with the manual invocation
         /// </summary>
-        private bool _loadInitialized = false;
-
-        /// <summary>
-        /// Represents a private field for event aggregator
-        /// </summary>
-        private IEventAggregator _eventAggregator;
-
-        /// <summary>
-        /// Represents a private field for the customer data service interface
-        /// </summary>
-        private ICustomerDataService _customerDataService;
+        private bool _loadInitialized;
 
         /// <summary> 
         /// A flag to indicate whether the object is disposed
         ///</summary> 
-        private bool disposed = false;
-
-        /// <summary> 
-        /// Represents the dispatcher service.  
-        ///</summary> 
-        private IDispatcherService _dispatcherService = null;
+        private bool _disposed;
 
         /// <summary> 
         /// Represents the customer data table. 
         /// </summary> 
-        private CustomerDataTable customerTable = null;
+        private CustomerDataTable _customerTable;
 
         /// <summary> 
         /// Represents the flag that indicates if customers can be loaded. 
         /// </summary> 
-        private bool canLoadCustomers = true;
-
-        /// <summary> 
-        /// Represents the window manager. 
-        /// </summary> 
-        private IWindowManager _windowManager = null;
-
-        /// <summary> 
-        /// Represents the customer edit view model. 
-        /// </summary> 
-        private ICustomerEditViewModel _customerEditViewModel = null;
-
-        /// <summary>
-        /// Represents the logger
-        /// </summary>
-        private ILog _logger;
+        private bool _canLoadCustomers = true;
 
         /// <summary>
         /// This field indicates the number of items you want to display on each page of a paginated list. 
@@ -81,14 +51,44 @@ namespace SqlDbEditor.ViewModels.Controls
         private int _pageIndex;
 
         /// <summary>
-        /// This field reflects the total number of customers in the entire dataset or list. 
+        /// This field reflects the total number of customers in the entire data-set or list. 
         /// It provides the count of all available customers, irrespective of how they are divided across pages.
         /// </summary>
         private int? _totalCustomers;
 
+        /// <summary>
+        /// Represents a private field for event aggregator service
+        /// </summary>
+        private readonly IEventAggregatorService _eventAggregatorService;
+
+        /// <summary>
+        /// Represents a private field for the customer data service interface
+        /// </summary>
+        private readonly ICustomerDataService _customerDataService;
+
+        /// <summary> 
+        /// Represents the dispatcher service.  
+        ///</summary> 
+        private readonly IDispatcherService _dispatcherService;
+
+        /// <summary> 
+        /// Represents the window manager. 
+        /// </summary> 
+        private readonly IWindowManager _windowManager;
+
+        /// <summary> 
+        /// Represents the customer edit view model. 
+        /// </summary> 
+        private readonly ICustomerEditViewModel _customerEditViewModel;
+
+        /// <summary>
+        /// Represents the logger
+        /// </summary>
+        private readonly ILog _logger;
         #endregion
 
         #region Constrcutor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomerViewModel"/> class.
         /// </summary>
@@ -96,25 +96,22 @@ namespace SqlDbEditor.ViewModels.Controls
         /// <param name="dispatcherService">The dispatcher service.</param>
         /// <param name="windowManager">The window manager.</param>
         /// <param name="customerEditViewModel">The customer edit view model.</param>
+        /// <param name="eventAggregatorService">The proxy for IEventAggregator</param>
         public CustomerViewModel(
             ICustomerDataService customerDataService,
             IDispatcherService dispatcherService,
             IWindowManager windowManager,
             ICustomerEditViewModel customerEditViewModel,
-            IEventAggregator eventAggregator
+            IEventAggregatorService eventAggregatorService
         )
         {
-            _eventAggregator = eventAggregator;
+            _eventAggregatorService = eventAggregatorService;
             _customerDataService = customerDataService;
             _dispatcherService = dispatcherService;
             _customerEditViewModel = customerEditViewModel;
             _windowManager = windowManager;
             _logger = _logger = LogManager.GetLog(typeof(CustomerViewModel));
-            ChangeIndexCommand = new ChangeIndexCommand(
-                async () => {
-                    await InternalLoadCustomers();
-                }
-            );
+            ChangeIndexCommand = new ChangeIndexCommand(ChangeIndexAction);
             _logger?.Info("CustomerViewModel contractor initialization is completed.");
         }
         #endregion
@@ -126,7 +123,7 @@ namespace SqlDbEditor.ViewModels.Controls
         public ICommand ChangeIndexCommand { get; set; }
 
         /// <summary>
-        /// This field reflects the total number of customers in the entire dataset or list. 
+        /// This field reflects the total number of customers in the entire data-set or list. 
         /// It provides the count of all available customers, irrespective of how they are divided across pages.
         /// </summary>
         public int? TotalCustomers
@@ -135,7 +132,7 @@ namespace SqlDbEditor.ViewModels.Controls
             set
             {
                 _totalCustomers = value;
-                NotifyOfPropertyChange(nameof(TotalCustomers));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -149,7 +146,7 @@ namespace SqlDbEditor.ViewModels.Controls
             set
             {
                 _pageSize = value;
-                NotifyOfPropertyChange(nameof(PageSize));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -163,7 +160,7 @@ namespace SqlDbEditor.ViewModels.Controls
             set
             {
                 _pageIndex = value;
-                NotifyOfPropertyChange(nameof(PageIndex));
+                NotifyOfPropertyChange();
             }
         }
 
@@ -172,11 +169,11 @@ namespace SqlDbEditor.ViewModels.Controls
         /// </summary>
         public bool CanLoadCustomers
         {
-            get => canLoadCustomers;
+            get => _canLoadCustomers;
             set
             {
-                canLoadCustomers = value;
-                NotifyOfPropertyChange(() => CanLoadCustomers);
+                _canLoadCustomers = value;
+                NotifyOfPropertyChange();
             }
         }
 
@@ -185,11 +182,11 @@ namespace SqlDbEditor.ViewModels.Controls
         /// </summary>
         public CustomerDataTable CustomerTable
         {
-            get => customerTable;
+            get => _customerTable;
             set
             {
-                customerTable = value;
-                NotifyOfPropertyChange(nameof(CustomerTable));
+                _customerTable = value;
+                NotifyOfPropertyChange();
                 _logger?.Info("CustomerTable filed is assigned in the CustomerViewModel");
             }
         }
@@ -201,6 +198,13 @@ namespace SqlDbEditor.ViewModels.Controls
         /// </summary>
         public async Task Loaded()
         {
+            if (!_loadInitialized)
+            {
+                PageIndex = 0;
+                PageSize = 100;
+                return;
+            }
+
             CanLoadCustomers = false;
 
             await Task.Factory.StartNew(async () =>
@@ -209,12 +213,12 @@ namespace SqlDbEditor.ViewModels.Controls
                 {
                     _logger?.Info("Start fetching the customer count from the database");                    
                     var totalCustomers = _customerDataService.CustomerTableAdapter.GetCoustomersCount();
-                    _dispatcherService.Invoke(() => TotalCustomers = totalCustomers);
+                    await _dispatcherService.InvokeAsync(() => TotalCustomers = totalCustomers);
                     _logger?.Info("Completed fetching the customer count from the database");
                 }
                 catch (SqlException ex)
                 {
-                    await PublishOnUIThreadAsync(new ErrorMessage { Message = ex.Message, Type = "Sql Connection Error" });
+                    await _eventAggregatorService.PublishOnUIThreadAsync(new ErrorMessage { Message = ex.Message, Type = "Sql Connection Error" });
                 }
                 catch (Exception ex)
                 {
@@ -223,15 +227,6 @@ namespace SqlDbEditor.ViewModels.Controls
             });            
 
             CanLoadCustomers = true;
-        }
-
-        private async Task InternalLoadCustomers()
-        {
-            if (_loadInitialized)
-            {
-                await Loaded();
-                await LoadCustomers();
-            }            
         }
 
         /// <summary>
@@ -248,7 +243,7 @@ namespace SqlDbEditor.ViewModels.Controls
                 {
                     _logger?.Info("Start fetching the customer information from the database");
                     var customers = _customerDataService.CustomerTableAdapter.GetCustomers(PageIndex, PageSize);
-                    _dispatcherService.Invoke(
+                    await _dispatcherService.InvokeAsync(
                         () => {
                             CustomerTable?.Clear();
                             CustomerTable = customers;                            
@@ -258,7 +253,7 @@ namespace SqlDbEditor.ViewModels.Controls
                 }
                 catch (SqlException ex)
                 {
-                    await PublishOnUIThreadAsync(new ErrorMessage { Message = ex.Message, Type = "Sql Connection Error" });
+                    await _eventAggregatorService.PublishOnUIThreadAsync(new ErrorMessage { Message = ex.Message, Type = "Sql Connection Error" });
                 }
                 catch (Exception ex)
                 {
@@ -270,15 +265,7 @@ namespace SqlDbEditor.ViewModels.Controls
 
             CanLoadCustomers = true;
         }
-        
-        /// <summary>
-        /// Publish the error message through the event aggregator
-        /// </summary>
-        /// <returns>A task representing the asynchronous operation.</returns>
-        public virtual Task  PublishOnUIThreadAsync(ErrorMessage errorMessage)
-        {
-            return _eventAggregator.PublishOnUIThreadAsync(errorMessage);
-        }
+       
 
         /// <summary>
         /// Edits an item in the customer table.
@@ -291,7 +278,7 @@ namespace SqlDbEditor.ViewModels.Controls
                 _logger?.Info("Started to show the edit dialog");
                 _customerEditViewModel.CustomerRow = rowView;
                 _logger?.Info("Start populating the fields in the edit form");
-                bool filledCustomer = _customerEditViewModel.FillCustomer();
+                var filledCustomer = _customerEditViewModel.FillCustomer();
 
                 if (filledCustomer)
                 {
@@ -308,6 +295,22 @@ namespace SqlDbEditor.ViewModels.Controls
             {
                 _logger?.Error(ex);
             }
+        }
+        #endregion
+
+        #region Private Methods
+        private async Task InternalLoadCustomers()
+        {
+            if (_loadInitialized)
+            {
+                await Loaded();
+                await LoadCustomers();
+            }
+        }
+
+        private async void ChangeIndexAction()
+        {
+            await InternalLoadCustomers();
         }
         #endregion
 
@@ -331,7 +334,7 @@ namespace SqlDbEditor.ViewModels.Controls
         protected virtual void Dispose(bool disposing)
         {
             // Check if the object is already disposed
-            if (!disposed)
+            if (!_disposed)
             {
                 // If disposing is true, release managed resources
                 if (disposing)
@@ -340,7 +343,7 @@ namespace SqlDbEditor.ViewModels.Controls
                 }
 
                 // Set the flag to true
-                disposed = true;
+                _disposed = true;
             }
         }
         #endregion

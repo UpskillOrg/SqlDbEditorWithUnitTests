@@ -1,4 +1,4 @@
-﻿namespace SqlDbEditor.Behaviours
+﻿namespace SqlDbEditor.Behaviors
 {
     /// <summary>
     /// Represents the input modes for a text box.

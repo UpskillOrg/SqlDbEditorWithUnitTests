@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using Caliburn.Micro;
-using SqlDbEditor.Services;
 
 namespace SqlDbEditor.Bootstrapper
 {
@@ -17,12 +15,12 @@ namespace SqlDbEditor.Bootstrapper
         /// <summary>
         /// A field that holds a reference to the SimpleContainer instance 
         /// </summary>
-        protected SimpleContainer _container;
+        protected SimpleContainer Container;
 
         /// <summary>
         /// Represents a logger configured with the bootstrap
         /// </summary>
-        protected ILog _logger = null;
+        protected ILog Logger = null;
 
         /// <summary>
         /// Initializes a new instance of the Bootstrapper class and calls the base class Initialize method.
@@ -31,7 +29,7 @@ namespace SqlDbEditor.Bootstrapper
         {
             Initialize();
             LogManager.GetLog = type => new DebugLog(type);
-            _logger = LogManager.GetLog(GetType());
+            Logger = LogManager.GetLog(GetType());
         }
 
         /// <summary>
@@ -42,15 +40,15 @@ namespace SqlDbEditor.Bootstrapper
             try
             {
                 // Create a new SimpleContainer instance
-                _container = new SimpleContainer();
+                Container = new SimpleContainer();
 
                 // Register the singleton services
-                _container.Singleton<IWindowManager, WindowManager>();
-                _container.Singleton<IEventAggregator, EventAggregator>();
-                _container.PerRequest<T>();
+                Container.Singleton<IWindowManager, WindowManager>();
+                Container.Singleton<IEventAggregator, EventAggregator>();
+                Container.PerRequest<T>();
             }
             catch (Exception ex) {
-                _logger?.Error(ex);
+                Logger?.Error(ex);
             }            
         }
 
@@ -63,7 +61,7 @@ namespace SqlDbEditor.Bootstrapper
         protected override object GetInstance(Type service, string key)
         {
             // Use the container to get the instance
-            return _container.GetInstance(service, key);
+            return Container.GetInstance(service, key);
         }
 
         /// <summary>
@@ -74,7 +72,7 @@ namespace SqlDbEditor.Bootstrapper
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
             // Use the container to get all instances
-            return _container.GetAllInstances(service);
+            return Container.GetAllInstances(service);
         }
 
         /// <summary>
@@ -84,7 +82,7 @@ namespace SqlDbEditor.Bootstrapper
         protected override void BuildUp(object instance)
         {
             // Use the container to build up the instance
-            _container.BuildUp(instance);
+            Container.BuildUp(instance);
         }
 
         /// <summary>

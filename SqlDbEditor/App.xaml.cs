@@ -1,7 +1,6 @@
 ﻿using Caliburn.Micro;
 using SqlDbEditor.Messages;
 using System;
-using System.Windows;
 
 // This application is used for editing SQL databases.
 namespace SqlDbEditor
@@ -9,15 +8,15 @@ namespace SqlDbEditor
     /// <summary>
     /// Represents the entry point of the application.
     /// </summary>
-    public partial class App : Application
+    public partial class App
     {
         /// <summary>
         /// Represents a logger configured with the bootstrap
         /// </summary>
-        private ILog _logger = null;
+        private readonly ILog _logger = null;
 
         /// <summary>
-        /// Constrocutor
+        /// Constructor
         /// </summary>
         public App()
         {

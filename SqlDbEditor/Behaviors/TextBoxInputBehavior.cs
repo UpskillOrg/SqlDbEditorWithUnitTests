@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace SqlDbEditor.Behaviours
+namespace SqlDbEditor.Behaviors
 {
     /// <summary>
     /// Represents a behavior for validating and controlling input in a TextBox control.

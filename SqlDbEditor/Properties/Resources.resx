@@ -171,7 +171,7 @@
   <data name="Phone" xml:space="preserve">
     <value>Phone</value>
   </data>
-  <data name="RetrivingCustomerMessage" xml:space="preserve">
+  <data name="RetrievingCustomerMessage" xml:space="preserve">
     <value>We are retrieving the customers, please wait.</value>
   </data>
   <data name="Sales" xml:space="preserve">

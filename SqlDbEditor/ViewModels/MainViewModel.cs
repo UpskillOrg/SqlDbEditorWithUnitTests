@@ -13,7 +13,7 @@ namespace SqlDbEditor.ViewModels
         /// <summary> 
         /// A flag to indicate whether the object is disposed
         ///</summary> 
-        private bool disposed = false;
+        private bool _disposed;
 
         /// <summary>
         /// Represents a view model for a customer.
@@ -23,16 +23,16 @@ namespace SqlDbEditor.ViewModels
         /// <summary>
         /// Represents the logger
         /// </summary>
-        private ILog _logger;
+        private readonly ILog _logger;
         #endregion
 
         #region Constructor
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
         /// </summary>
-        /// <param name="windowManager">The window manager.</param>
         /// <param name="viewModel">The customer view model.</param>
-        public MainViewModel(IWindowManager windowManager, ICustomerViewModel viewModel)
+        public MainViewModel(ICustomerViewModel viewModel)
         {
             _logger = LogManager.GetLog(typeof(MainViewModel));
             CustomerViewModel = viewModel;
@@ -45,14 +45,11 @@ namespace SqlDbEditor.ViewModels
         /// </summary>
         public ICustomerViewModel CustomerViewModel
         {
-            get
-            {
-                return _customerViewModel;
-            }
+            get => _customerViewModel;
             set
             {
                 _customerViewModel = value;
-                NotifyOfPropertyChange(nameof(CustomerViewModel));
+                NotifyOfPropertyChange();
                 _logger?.Info("CustomerViewModel is assigned in the Main View Model");
             }
         }
@@ -77,7 +74,7 @@ namespace SqlDbEditor.ViewModels
         protected virtual void Dispose(bool disposing)
         {
             // Check if the object is already disposed
-            if (!disposed)
+            if (!_disposed)
             {
                 // If disposing is true, release managed resources
                 if (disposing)
@@ -86,7 +83,7 @@ namespace SqlDbEditor.ViewModels
                 }
 
                 // Set the flag to true
-                disposed = true;
+                _disposed = true;
             }
         }
         #endregion

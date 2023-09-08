@@ -7,7 +7,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/SqlDbEditor;component/Styles/Styles.xaml" />
                 <ResourceDictionary>
-                    <local:AppBootstrapper x:Key="bootstrapper" />
+                    <local:AppBootstrapper x:Key="Bootstrapper" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

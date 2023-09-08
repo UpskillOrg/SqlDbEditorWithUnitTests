@@ -47,7 +47,7 @@ namespace SqlDbEditor.Converters
             if (value is Visibility visibilityValue)
             {
                 // Return the opposite of the built-in BooleanToVisibilityConverter logic
-                return visibilityValue == Visibility.Visible ? false : true;
+                return visibilityValue != Visibility.Visible;
             }
             else
             {

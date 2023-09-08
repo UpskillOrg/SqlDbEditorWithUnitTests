@@ -75,6 +75,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\GridPaging.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -91,10 +94,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\MainView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -103,9 +102,9 @@
       <DependentUpon>GridPaging.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Behaviours\RegexInputValidatorBehavior.cs" />
-    <Compile Include="Behaviours\TextBoxInputBehavior.cs" />
-    <Compile Include="Behaviours\TextBoxInputMode.cs" />
+    <Compile Include="Behaviors\RegexInputValidatorBehavior.cs" />
+    <Compile Include="Behaviors\TextBoxInputBehavior.cs" />
+    <Compile Include="Behaviors\TextBoxInputMode.cs" />
     <Compile Include="Bootstrapper\AppBootstrapper.cs" />
     <Compile Include="Bootstrapper\Bootstrapper.cs" />
     <Compile Include="Command\ChangeIndexCommand.cs" />
@@ -123,10 +122,12 @@
     <Compile Include="Messages\ErrorMessage.cs" />
     <Compile Include="RegEx\RegExConstants.cs" />
     <Compile Include="Services\CustomerDataService.cs" />
+    <Compile Include="Services\EventAggregatorService.cs" />
     <Compile Include="Services\ICustomerDataService.cs" />
     <Compile Include="Services\DispatcherService.cs" />
     <Compile Include="Services\IDispatcherService.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="Services\IEventAggregatorService.cs" />
     <Compile Include="Services\IStateProviderService.cs" />
     <Compile Include="Services\StateProviderService.cs" />
     <Compile Include="ViewModels\Controls\CustomerViewModel.cs" />
@@ -142,10 +143,10 @@
     <Compile Include="Views\CustomerEditView.xaml.cs">
       <DependentUpon>CustomerEditView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Page Include="Views\MainView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

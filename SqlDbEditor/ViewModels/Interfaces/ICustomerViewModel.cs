@@ -37,12 +37,5 @@ namespace SqlDbEditor.ViewModels.Controls
         /// </summary>
         /// <returns>A task representing the asynchronous operation.</returns>
         Task LoadCustomers();
-
-        /// <summary>
-        /// Publish the error message through the event aggregator
-        /// </summary>
-        /// <returns>A task representing the asynchronous operation.</returns>
-        Task PublishOnUIThreadAsync(ErrorMessage errorMessage);
     }
-
 }

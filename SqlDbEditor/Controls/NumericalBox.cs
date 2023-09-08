@@ -1,7 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static System.String;
 
 namespace SqlDbEditor.Controls
 {
@@ -12,10 +14,14 @@ namespace SqlDbEditor.Controls
     public class NumericalBox : TextBox
     {
         #region Verification Patterns
-        private static readonly Regex _rgxChangedValid = new Regex(@"^[-+]?\d*(\.?)(\d*)([eE][-+]?\d*)?$", RegexOptions.ECMAScript);
-        private static readonly Regex _rgxLostFocusValid = new Regex(@"^[-+]?\d*(\.?)(\d+)([eE][-+]?\d+)?$", RegexOptions.ECMAScript);
-        private static readonly Regex _rgxSaveChanged = new Regex(@"[-+]?\d*(\.?)(\d*)([eE][-+]?\d*)?", RegexOptions.ECMAScript);
-        private static readonly Regex _rgxSaveLost = new Regex(@"[-+]?\d*(\.?)(\d+)([eE][-+]?\d+)?", RegexOptions.ECMAScript);
+        private static readonly Regex RgxChangedValid =
+            new Regex(@"^[-+]?\d*(\.?)(\d*)([eE][-+]?\d*)?$", RegexOptions.ECMAScript);
+        private static readonly Regex RgxLostFocusValid =
+            new Regex(@"^[-+]?\d*(\.?)(\d+)([eE][-+]?\d+)?$", RegexOptions.ECMAScript);
+        private static readonly Regex RgxSaveChanged =
+            new Regex(@"[-+]?\d*(\.?)(\d*)([eE][-+]?\d*)?", RegexOptions.ECMAScript);
+        private static readonly Regex RgxSaveLost = 
+            new Regex(@"[-+]?\d*(\.?)(\d+)([eE][-+]?\d+)?", RegexOptions.ECMAScript);
         #endregion Verification Patterns
 
         #region Overrides
@@ -24,6 +30,7 @@ namespace SqlDbEditor.Controls
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            if (e == null) throw new ArgumentNullException(nameof(e));
             switch (e.Key)
             {
                 case Key.E:
@@ -62,31 +69,28 @@ namespace SqlDbEditor.Controls
         }
 
         /// <summary>
-        /// is called when textbox is changed
+        /// is called when text box is changed
         /// tries to correct text to longest validated substring
         /// </summary>
         protected override void OnTextChanged(TextChangedEventArgs e)
         {
             base.OnTextChanged(e);
-            string longestValidText;
 
-            if (!IsTextValid(_rgxChangedValid, _rgxSaveChanged, Text, out longestValidText))
-            {
-                this.Text = longestValidText;
-                CaretIndex = Text.Length;
-            }
+            if (IsTextValid(RgxChangedValid, RgxSaveChanged, Text, out var longestValidText)) return;
+
+            Text = longestValidText;
+            CaretIndex = Text.Length;
         }
 
         /// <summary>
-        /// is called when textbox looses the focus
+        /// is called when text box looses the focus
         /// tries to correct text to longest validated substring
         /// </summary>
         protected override void OnLostFocus(RoutedEventArgs e)
         {
             base.OnLostFocus(e);
-            string longestValidText;
 
-            if (!IsTextValid(_rgxLostFocusValid, _rgxSaveLost, Text, out longestValidText))
+            if (!IsTextValid(RgxLostFocusValid, RgxSaveLost, Text, out var longestValidText))
             {
                 this.Text = longestValidText;
             }
@@ -97,10 +101,10 @@ namespace SqlDbEditor.Controls
         /// <summary>
         /// checks text validity and tries to separate most left valid substring
         /// </summary>
-        private bool IsTextValid(Regex rgxValid, Regex rgxSave, string text, out string longestValidSubstr)
+        private static bool IsTextValid(Regex rgxValid, Regex rgxSave, string text, out string longestValidSubstr)
         {
             longestValidSubstr = rgxSave.Match(text).Value;
-            return !string.IsNullOrEmpty(text == null ? null : text.Trim()) ? rgxValid.IsMatch(text) : false;
+            return !IsNullOrEmpty(text.Trim()) && rgxValid.IsMatch(text);
         }
         #endregion Private Methods
     }

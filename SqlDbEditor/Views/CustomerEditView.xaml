@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cal="http://www.caliburnproject.org" 
-        xmlns:behaviors="clr-namespace:SqlDbEditor.Behaviours" 
+        xmlns:behaviors="clr-namespace:SqlDbEditor.Behaviors" 
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         WindowStartupLocation="CenterOwner"
         xmlns:resources="clr-namespace:SqlDbEditor.Properties" 

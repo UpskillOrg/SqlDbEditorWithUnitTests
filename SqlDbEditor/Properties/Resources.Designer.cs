@@ -225,9 +225,9 @@ namespace SqlDbEditor.Properties {
         /// <summary>
         ///   Looks up a localized string similar to We are retrieving the customers, please wait..
         /// </summary>
-        public static string RetrivingCustomerMessage {
+        public static string RetrievingCustomerMessage {
             get {
-                return ResourceManager.GetString("RetrivingCustomerMessage", resourceCulture);
+                return ResourceManager.GetString("RetrievingCustomerMessage", resourceCulture);
             }
         }
         

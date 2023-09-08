@@ -33,9 +33,16 @@ namespace SqlDbEditor.Controls
         /// </summary>
         public static readonly DependencyProperty ChangedIndexCommandProperty;
 
+        /// <summary>
+        /// Identifies the dependency property for the command that represents either the "Previous Page" or "First Page" functionality.
+        /// </summary>
         public static readonly DependencyProperty PreviousOrFirstPageProperty;
 
+        /// <summary>
+        /// Identifies the dependency property for the command that represents either the "Next Page" or "Last Page" functionality.
+        /// </summary>
         public static readonly DependencyProperty NextOrLastPageProperty;
+
 
         /// <summary>
         /// Gets or sets the total count of items to be paginated.
@@ -64,16 +71,22 @@ namespace SqlDbEditor.Controls
             set => SetValue(PageSizeProperty, value);
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the control represents either the "Previous Page" or "First Page" functionality.
+        /// </summary>
         public bool PreviousOrFirstPage
         {
-            get { return (bool)GetValue(PreviousOrFirstPageProperty); }
-            set { SetValue(PreviousOrFirstPageProperty, value); }
+            get => (bool)GetValue(PreviousOrFirstPageProperty);
+            set => SetValue(PreviousOrFirstPageProperty, value);
         }
-                  
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the control represents either the "Next Page" or "Last Page" functionality.
+        /// </summary>
         public bool NextOrLastPage
         {
-            get { return (bool)GetValue(NextOrLastPageProperty); }
-            set { SetValue(NextOrLastPageProperty, value); }
+            get => (bool)GetValue(NextOrLastPageProperty);
+            set => SetValue(NextOrLastPageProperty, value);
         }
         #endregion
 
@@ -85,24 +98,24 @@ namespace SqlDbEditor.Controls
         static GridPaging()
         {
             // Metadata for the TotalCountProperty
-            UIPropertyMetadata metaDataTotalCountProperty = new UIPropertyMetadata(0, PropertyTotalCountChanged);
-            TotalCountProperty = DependencyProperty.Register("TotalCount", typeof(int), typeof(GridPaging), metaDataTotalCountProperty);
+            var metaDataTotalCountProperty = new UIPropertyMetadata(0, PropertyTotalCountChanged);
+            TotalCountProperty = DependencyProperty.Register(nameof(TotalCount), typeof(int), typeof(GridPaging), metaDataTotalCountProperty);
 
             // Metadata for the PageIndexProperty
-            UIPropertyMetadata metaDataForPageIndexProperty = new UIPropertyMetadata(0, PropertyPageIndexChanged);
-            PageIndexProperty = DependencyProperty.Register("PageIndex", typeof(int), typeof(GridPaging), metaDataForPageIndexProperty);
+            var metaDataForPageIndexProperty = new UIPropertyMetadata(0, PropertyPageIndexChanged);
+            PageIndexProperty = DependencyProperty.Register(nameof(PageIndex), typeof(int), typeof(GridPaging), metaDataForPageIndexProperty);
 
             // Metadata for the PageSizeProperty
-            UIPropertyMetadata metaDataForPageSizeProperty = new UIPropertyMetadata(0, PropertyPageSizeChanged);
-            PageSizeProperty = DependencyProperty.Register("PageSize", typeof(int), typeof(GridPaging), metaDataForPageSizeProperty);
+            var metaDataForPageSizeProperty = new UIPropertyMetadata(0, PropertyPageSizeChanged);
+            PageSizeProperty = DependencyProperty.Register(nameof(PageSize), typeof(int), typeof(GridPaging), metaDataForPageSizeProperty);
 
-            PreviousOrFirstPageProperty = DependencyProperty.Register("PreviousOrFirstPage", typeof(bool), typeof(GridPaging), new PropertyMetadata(false));
-            NextOrLastPageProperty = DependencyProperty.Register("NextOrLastPage", typeof(bool), typeof(GridPaging), new PropertyMetadata(false));
+            PreviousOrFirstPageProperty = DependencyProperty.Register(nameof(PreviousOrFirstPage), typeof(bool), typeof(GridPaging), new PropertyMetadata(false));
+            NextOrLastPageProperty = DependencyProperty.Register(nameof(NextOrLastPage), typeof(bool), typeof(GridPaging), new PropertyMetadata(false));
 
             // Metadata for the ChangedIndexCommandProperty
             ChangedIndexCommandProperty =
                 DependencyProperty.Register(
-                    "ChangedIndexCommand",
+                    nameof(ChangedIndexCommand),
                     typeof(ICommand),
                     typeof(GridPaging),
                     new UIPropertyMetadata(null)
@@ -213,35 +226,32 @@ namespace SqlDbEditor.Controls
         /// <param name="gridPaging">The <see cref="GridPaging"/> instance to configure.</param>
         private static void ConfigureInternalValues(GridPaging gridPaging)
         {
-            // Set the Total de paginas....
+            // Set the Total Pages
             gridPaging.TotalPageTextBlock.Text = gridPaging.TotalPages.ToString();
 
-            // Set the pageSize control
-            foreach (int comboBoxItem in gridPaging.PageSizeComboBox.Items)
+            // Set the PageSize control
+            foreach (int item in gridPaging.PageSizeComboBox.Items)
             {
-                int cbi = comboBoxItem;
-                if (cbi == gridPaging.PageSize)
+                if (item == gridPaging.PageSize)
                 {
-                    gridPaging.PageSizeComboBox.SelectedItem = comboBoxItem;
+                    gridPaging.PageSizeComboBox.SelectedItem = item;
                     break;
                 }
             }
 
             // if the set value in Page size is not in the list, return to the original value.
-            int? sel = (int)(gridPaging.PageSizeComboBox.SelectedItem ?? 0);
-            if (sel != null)
-            {
-                gridPaging.PageSize = sel.Value;
+            int? selectedItem = (int)(gridPaging.PageSizeComboBox.SelectedItem ?? 0);
+            if (selectedItem == null) return;
+            gridPaging.PageSize = selectedItem.Value;
 
-                // Set the visibility of Pagination Buttons.
-                gridPaging.PaginationGrid.Visibility = gridPaging.TotalCount > gridPaging.PageSize ?
-                    Visibility.Visible :
-                    Visibility.Hidden;
+            // Set the visibility of Pagination Buttons.
+            gridPaging.PaginationGrid.Visibility = gridPaging.TotalCount > gridPaging.PageSize ?
+                Visibility.Visible :
+                Visibility.Hidden;
 
-                // Calculate the HasNextPage and previous page
-                gridPaging.HasPreviousPage = gridPaging.PageIndex > 1;
-                gridPaging.HasNextPage = gridPaging.TotalPages > gridPaging.PageIndex;
-            }
+            // Calculate the HasNextPage and previous page
+            gridPaging.HasPreviousPage = gridPaging.PageIndex > 1;
+            gridPaging.HasNextPage = gridPaging.TotalPages > gridPaging.PageIndex;
         }
 
         /// <summary>
@@ -250,11 +260,10 @@ namespace SqlDbEditor.Controls
         private void ExecuteCommandChangeIndex()
         {
             // Test if the command index is assigned.
-            if (ChangedIndexCommand != null)
-            {
-                ChangedIndexCommand.Execute(null);
-            }
+            if (ChangedIndexCommand == null) return;
+            ChangedIndexCommand.Execute(null);
         }
+
         #endregion
 
         #region Control Events
@@ -265,7 +274,7 @@ namespace SqlDbEditor.Controls
         /// </summary>
         private static void PropertyPageSizeChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            GridPaging gridPaging = (GridPaging)dependencyObject;
+            var gridPaging = (GridPaging)dependencyObject;
             ConfigureInternalValues(gridPaging);
             gridPaging.PageIndex = 1;
         }
@@ -276,8 +285,8 @@ namespace SqlDbEditor.Controls
         /// </summary>
         private static void PropertyPageIndexChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            GridPaging gridPaging = (GridPaging)dependencyObject;
-            int actualPage = (int)e.NewValue;
+            var gridPaging = (GridPaging)dependencyObject;
+            var actualPage = (int)e.NewValue;
             gridPaging.CurrentPageTextBlock.Text = actualPage.ToString();
             ConfigureInternalValues(gridPaging);
         }
@@ -288,7 +297,7 @@ namespace SqlDbEditor.Controls
         /// </summary>
         private static void PropertyTotalCountChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            GridPaging gridPaging = (GridPaging)dependencyObject;
+            var gridPaging = (GridPaging)dependencyObject;
             var comboBox = gridPaging.PageSizeComboBox;
             gridPaging.TotalRowsTextBlock.Text = e.NewValue.ToString();
             var items = GeneratePageSizeOptions(int.Parse(gridPaging.TotalRowsTextBlock.Text));
@@ -303,20 +312,20 @@ namespace SqlDbEditor.Controls
         /// </summary>
         private static List<int> GeneratePageSizeOptions(int totalRecords)
         {
-            List<int> pageSizeOptions = new List<int>();
+            var pageSizeOptions = new List<int>();
 
             // Calculate maxPageSize as the largest power of 10 <= totalRecords
-            int maxPageSize = (int)Math.Pow(10, (int)Math.Log10(totalRecords));
+            var maxPageSize = (int)Math.Pow(10, (int)Math.Log10(totalRecords));
 
             // Start with the smallest page size
-            int pageSize = 10;
+            var pageSize = 10;
 
             while (pageSize <= maxPageSize)
             {
                 pageSizeOptions.Add(pageSize);
 
                 // Include multiples of 5 (e.g., 50, 500, 5000) within maxPageSize
-                int nextSize = pageSize * 5;
+                var nextSize = pageSize * 5;
                 if (nextSize <= maxPageSize)
                 {
                     pageSizeOptions.Add(nextSize);
@@ -335,14 +344,12 @@ namespace SqlDbEditor.Controls
         private void PageSizeChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             var items = e.AddedItems;
-            if (items != null && items.Count > 0)
+            if (items == null || items.Count <= 0) return;
+            var value = (int)items[0];
+            PageSize = value;
+            if (TotalCount > 0)
             {
-                var value = (int)items[0];
-                PageSize = value;
-                if (TotalCount > 0)
-                {
-                    ExecuteCommandChangeIndex();
-                }
+                ExecuteCommandChangeIndex();
             }
         }
 
@@ -354,13 +361,11 @@ namespace SqlDbEditor.Controls
         /// </summary>
         private void OnButtonNextClick(object sender, RoutedEventArgs e)
         {
-            if (PageIndex < TotalPages)
-            {
-                PageIndex++;
-                ExecuteCommandChangeIndex();
-                NextOrLastPage = true;
-                PreviousOrFirstPage = false;
-            }
+            if (PageIndex >= TotalPages) return;
+            PageIndex++;
+            ExecuteCommandChangeIndex();
+            NextOrLastPage = true;
+            PreviousOrFirstPage = false;
         }
 
         /// <summary>
@@ -369,7 +374,7 @@ namespace SqlDbEditor.Controls
         /// </summary>
         private void OnButtonLastClick(object sender, RoutedEventArgs e)
         {
-            int page = TotalPages;
+            var page = TotalPages;
             PageIndex = page;
             ExecuteCommandChangeIndex();
             NextOrLastPage = true;
@@ -382,13 +387,11 @@ namespace SqlDbEditor.Controls
         /// </summary>
         private void OnButtonPreviousClick(object sender, RoutedEventArgs e)
         {
-            if (PageIndex > 1)
-            {
-                PageIndex--;
-                ExecuteCommandChangeIndex();
-                NextOrLastPage = false;
-                PreviousOrFirstPage = true;
-            }
+            if (PageIndex <= 1) return;
+            PageIndex--;
+            ExecuteCommandChangeIndex();
+            NextOrLastPage = false;
+            PreviousOrFirstPage = true;
         }
 
         /// <summary>
@@ -397,8 +400,8 @@ namespace SqlDbEditor.Controls
         /// </summary>
         private void OnButtonFirstClick(object sender, RoutedEventArgs e)
         {
-            const int Page = 1;
-            PageIndex = Page;
+            const int page = 1;
+            PageIndex = page;
             ExecuteCommandChangeIndex();
             NextOrLastPage = false;
             PreviousOrFirstPage = true;

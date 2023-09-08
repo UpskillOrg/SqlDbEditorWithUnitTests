@@ -55,8 +55,8 @@
                 <StackPanel>
                     <ProgressBar Margin="5,10,5,5" 
                                  Style="{StaticResource ProgressBarStyle}" 
-                                 FlowDirection="{Binding ElementName=gridPaging, Path=PreviousOrFirstPage, Converter={StaticResource BoolToFlowDirectionConverter}}" />
-                    <TextBlock Margin="5" Text="{x:Static resources:Resources.RetrivingCustomerMessage}"
+                                 FlowDirection="{Binding ElementName=GridPaging, Path=PreviousOrFirstPage, Converter={StaticResource BoolToFlowDirectionConverter}}" />
+                    <TextBlock Margin="5" Text="{x:Static resources:Resources.RetrievingCustomerMessage}"
                            Style="{StaticResource ProgressIndicatorTextBlockStyle}" />
                 </StackPanel>
             </Border>
@@ -64,7 +64,7 @@
         <controls:GridPaging
             Visibility="{Binding Path=HasItems, ElementName=CustomerTable, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}}"
             Grid.Row="2" 
-            x:Name="gridPaging"
+            x:Name="GridPaging"
             Margin="10"
             TotalCount="{Binding TotalCustomers, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
             PageSize="{Binding PageSize, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 

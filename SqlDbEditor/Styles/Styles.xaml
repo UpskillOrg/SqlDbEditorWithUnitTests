@@ -3,8 +3,7 @@
                     xmlns:cal="http://www.caliburnproject.org" 
                     xmlns:sqlDbEditor="clr-namespace:SqlDbEditor.Converters"
                     xmlns:controls="clr-namespace:SqlDbEditor.Controls"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-                    xmlns:regex="clr-namespace:SqlDbEditor.RegEx">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <!-- #Region "Coverters used across the application" -->
 
     <!--This line adds a converter named InverseBooleanToVisibilityConverter to the resource dictionary.-->
@@ -46,7 +45,6 @@
     <!--This style named TitleGridStyle targets the Grid control type and sets its margin, grid row, height, and background color.-->
     <Style x:Key="TitleGridStyle" TargetType="Grid">
         <Setter Property="Margin" Value="10,10" />
-        <Setter Property="Grid.Row" Value="0" />
         <Setter Property="Height" Value="40" />
         <Setter Property="Background" Value="DimGray" />
     </Style>
@@ -147,7 +145,7 @@
     <!-- #EndRegion -->
 
     <!-- #Region "CustomerView Styles" -->
-    <!--This style named CustomerDataGridStyle targets the DataGrid control type and sets its margin, border thickness, border brush color, column width, column virtualization enablement, row virtualization enablement, read-only mode, auto-generate columns disablement, and row deletion disablement.-->
+    <!--This style named CustomerDataGridStyle targets the DataGrid control type and sets its margin, border thickness, border brush color, column width,enabling column virtualization , enabling row virtualization, read-only mode, auto-generate columns disablement, and row deletion disablement.-->
     <Style x:Key="CustomerDataGridStyle" TargetType="DataGrid">
         <Setter Property="Margin" Value="10" />
         <Setter Property="BorderThickness" Value="2" />

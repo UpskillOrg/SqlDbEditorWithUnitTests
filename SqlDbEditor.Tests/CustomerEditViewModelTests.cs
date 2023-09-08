@@ -1,5 +1,4 @@
-﻿using Caliburn.Micro;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SqlDbEditor.Services;
 using SqlDbEditor.ViewModels;
@@ -36,9 +35,9 @@ namespace SqlDbEditor.Tests
             // Arrange
             var customerDataServiceMock = new Mock<ICustomerDataService>();
             var stateProviderServiceMock = new Mock<IStateProviderService>();
-            var eventAggregatorMock = new Mock<IEventAggregator>();
-            stateProviderServiceMock.Setup(provider => provider.States).Returns(new string[] { "NY" });
-            var viewModel = new CustomerEditViewModel(customerDataServiceMock.Object, stateProviderServiceMock.Object, eventAggregatorMock.Object)
+            var eventAggregatorServiceMock = new Mock<IEventAggregatorService>();
+            stateProviderServiceMock.Setup(provider => provider.States).Returns(new[] { "NY" });
+            var viewModel = new CustomerEditViewModel(customerDataServiceMock.Object, stateProviderServiceMock.Object, eventAggregatorServiceMock.Object)
             {
                 CustomerRow = DataTableHelper.DataRowView
             };
@@ -69,9 +68,9 @@ namespace SqlDbEditor.Tests
             // Arrange
             var customerDataServiceMock = new Mock<ICustomerDataService>();
             var stateProviderServiceMock = new Mock<IStateProviderService>();
-            var eventAggregatorMock = new Mock<IEventAggregator>();
-            stateProviderServiceMock.Setup(provider => provider.States).Returns(new string[] { "NY" });
-            var viewModel = new CustomerEditViewModel(customerDataServiceMock.Object, stateProviderServiceMock.Object, eventAggregatorMock.Object)
+            var eventAggregatorServiceMock = new Mock<IEventAggregatorService>();
+            stateProviderServiceMock.Setup(provider => provider.States).Returns(new[] { "NY" });
+            var viewModel = new CustomerEditViewModel(customerDataServiceMock.Object, stateProviderServiceMock.Object, eventAggregatorServiceMock.Object)
             {
                 CustomerRow = DataTableHelper.CustomerDataTable.DefaultView.AddNew()
             };
@@ -92,22 +91,24 @@ namespace SqlDbEditor.Tests
             // Arrange
             var customerDataServiceMock = new Mock<ICustomerDataService>();
             var stateProviderServiceMock = new Mock<IStateProviderService>();
-            var eventAggregatorMock = new Mock<IEventAggregator>();
-            stateProviderServiceMock.Setup(provider => provider.States).Returns(new string[] { "NY" });
-            var viewModel = new CustomerEditViewModel(customerDataServiceMock.Object, stateProviderServiceMock.Object, eventAggregatorMock.Object);
-
-            // Set up customer row and other properties
-            viewModel.CustomerRow = DataTableHelper.CustomerDataTable.DefaultView.AddNew();
-            viewModel.FirstName = "John";
-            viewModel.LastName = "Doe";
-            viewModel.Address1 = "123 Main St";
-            viewModel.Address2 = "Redmond";
-            viewModel.City = "New York";
-            viewModel.SelectedState = "NY";
-            viewModel.Zip = "10001";
-            viewModel.Phone = "776077099";
-            viewModel.Age = "30";
-            viewModel.Sales = "1000.50";
+            var eventAggregatorServiceMock = new Mock<IEventAggregatorService>();
+            stateProviderServiceMock.Setup(provider => provider.States).Returns(new[] { "NY" });
+            var viewModel = new CustomerEditViewModel(customerDataServiceMock.Object, stateProviderServiceMock.Object,
+                eventAggregatorServiceMock.Object)
+            {
+                // Set up customer row and other properties
+                CustomerRow = DataTableHelper.CustomerDataTable.DefaultView.AddNew(),
+                FirstName = "John",
+                LastName = "Doe",
+                Address1 = "123 Main St",
+                Address2 = "Redmond",
+                City = "New York",
+                SelectedState = "NY",
+                Zip = "10001",
+                Phone = "776077099",
+                Age = "30",
+                Sales = "1000.50"
+            };
 
             // Mock the UpdateCustomer method of the data service
             customerDataServiceMock.Setup(service => service.CustomerTableAdapter.UpdateCustomer(
@@ -198,9 +199,9 @@ namespace SqlDbEditor.Tests
             // Arrange
             var customerDataServiceMock = new Mock<ICustomerDataService>();
             var stateProviderServiceMock = new Mock<IStateProviderService>();
-            var eventAggregatorMock = new Mock<IEventAggregator>();
-            stateProviderServiceMock.Setup(provider => provider.States).Returns(new string[] { "NY" });
-            var viewModel = new CustomerEditViewModel(customerDataServiceMock.Object, stateProviderServiceMock.Object, eventAggregatorMock.Object);
+            var eventAggregatorServiceMock = new Mock<IEventAggregatorService>();
+            stateProviderServiceMock.Setup(provider => provider.States).Returns(new[] { "NY" });
+            var viewModel = new CustomerEditViewModel(customerDataServiceMock.Object, stateProviderServiceMock.Object, eventAggregatorServiceMock.Object);
 
             // Set up customer row and other properties
             viewModel.CustomerRow = DataTableHelper.CustomerDataTable.DefaultView.AddNew();

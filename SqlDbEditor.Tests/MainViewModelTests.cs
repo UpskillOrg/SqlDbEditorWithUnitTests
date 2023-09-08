@@ -20,14 +20,14 @@ namespace SqlDbEditor.Tests
             var mockCustomerDataService = new Mock<ICustomerDataService>();
             var mockDispatcherService = new Mock<IDispatcherService>();
             var mockWindowManager = new Mock<IWindowManager>();
-            var mockEventAggregator = new Mock<IEventAggregator>();
+            var mockEventAggregatorService = new Mock<IEventAggregatorService>();
             var mockStateProviderService = new Mock<IStateProviderService>();
 
             // Create instances of ViewModel objects and set up dependencies
             var customerEditViewModel = new CustomerEditViewModel(
                 mockCustomerDataService.Object,
                 mockStateProviderService.Object,
-                mockEventAggregator.Object
+                mockEventAggregatorService.Object
             );
 
             var customerViewModel = new CustomerViewModel(
@@ -35,11 +35,11 @@ namespace SqlDbEditor.Tests
                 mockDispatcherService.Object,
                 mockWindowManager.Object,
                 customerEditViewModel,
-                mockEventAggregator.Object
+                mockEventAggregatorService.Object
             );
 
             // Create an instance of the MainViewModel with the previously created ViewModel objects
-            var mainViewModelMock = new Mock<MainViewModel>(mockWindowManager.Object, customerViewModel);
+            var mainViewModelMock = new Mock<MainViewModel>(customerViewModel);
 
             // Act
             mainViewModelMock.Object.Dispose();
